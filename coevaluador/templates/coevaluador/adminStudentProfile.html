@@ -1,0 +1,211 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+
+    <title>Coevaluaciones Recientes</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/custom-themes.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'coevaluador/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/profile.css' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'coevaluador/images/favicon.ico' %}"/>
+</head>
+
+<body>
+<div class="page-wrapper chiller-theme sidebar-bg toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+
+    <!-- sidebar-wrapper  -->
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <img src="{% static 'coevaluador/images/logo2.png' %}">
+            </div>
+            <div class="sidebar-brand">
+                <a href="#">Administrador</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img class="img-responsive img-rounded" src="{% static 'coevaluador/images/user.jpg' %}"
+                         alt="User picture">
+                </div>
+                <div class="user-info">
+                        <span class="user-name">Checho
+                            <strong>Leiva</strong>
+                        </span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Cursos</span>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>
+                            <span><small><i>CC-4102</i><br>Diseño y Análisis de Algoritmos</small></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>
+                            <span><small><i>CC-4401</i><br>Ingeniería de Software</small></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>
+                            <span><small><i>CC-4302</i><br>Sistemas Operativos</small></span><br>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer"></div>
+    </nav>
+
+    <!-- page-content" -->
+    <div class="page-content">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="form-group col-md-9">
+                    <h2>Juanito Pérez</h2>
+                </div>
+            </div>
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-data" role="tab"
+                       aria-controls="nav-home" aria-selected="true">Datos</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-coev" role="tab"
+                       aria-controls="nav-contact" aria-selected="false">Coevaluaciones</a>
+                    <a class="nav-item nav-link" id="nav-course-tab" data-toggle="tab" href="#nav-course" role="tab"
+                       aria-controls="nav-course" aria-selected="false">Cursos</a>
+                </div>
+            </nav>
+            <div class="tab-content profile-tab" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-data" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2"><label>Rut:</label></div>
+                            <div class="col-md-10"><label>19.875.643-1</label></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2"><label>Correo:</label></div>
+                            <div class="col-md-10"><label>juanito.perez@gmail.com</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-coev" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Curso</th>
+                            <th scope="col">Desde</th>
+                            <th scope="col">Hasta</th>
+                            <th scope="col">Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Ingeniería de Software I</td>
+                            <td>17/10/18</td>
+                            <td>22/10/18</td>
+                            <td><u><a class="text-danger" href="url">Pendiente</a></u></td>
+                        </tr>
+                        <tr>
+                            <td>Redes</td>
+                            <td>10/10/18</td>
+                            <td>17/10/18</td>
+                            <td>Contestada</td>
+                        </tr>
+                        <tr>
+                            <td>Sistemas Operativos</td>
+                            <td>06/10/18</td>
+                            <td>13/10/18</td>
+                            <td><u><a href="url">Publicada</a></u></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="nav-course" role="tabpanel" aria-labelledby="nav-course-tab">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Curso</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                        </thead>
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="row" colspan="4">Primavera 2018</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><a href="#">Ingeniería de Software I</a></td>
+                            <td><select><option value="Alumno">Alumno</option></select></td>
+                            <td> <a href="#"><i class="fas fa-trash-alt danger-icon" style="color:red"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><a href="#">Redes</a></td>
+                            <td><select><option value="Alumno">Alumno</option></select></td>
+                            <td> <a href="#"><i class="fas fa-trash-alt danger-icon" style="color:red"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><a href="">Sistemas Operativos</a></td>
+                            <td><select><option value="Ayudante">Ayudante</option></select></td>
+                            <td> <a href="#"><i class="fas fa-trash-alt danger-icon" style="color:red"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><a href="">Diseño y Análisis de Algoritmos</a></td>
+                            <td><select><option value="Auxiliar">Auxiliar</option></select></td>
+                            <td> <a href="#"><i class="fas fa-trash-alt danger-icon" style="color:red"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- page-wrapper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="{% static 'coevaluador/js/custom.js' %}"></script>
+</body>

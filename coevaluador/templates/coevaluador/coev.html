@@ -1,0 +1,699 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Coevaluaciones Recientes</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/custom-themes.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'coevaluador/css/main.css' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'coevaluador/images/favicon.ico' %}"/>
+</head>
+
+<body>
+<div class="page-wrapper chiller-theme sidebar-bg toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+
+    <!-- sidebar-wrapper  -->
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <img src="{% static 'coevaluador/images/logo2.png' %}">
+            </div>
+            <div class="sidebar-brand">
+                <a href="#">Cuerpo Docente</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img class="img-responsive img-rounded" src="{% static 'coevaluador/images/user.jpg' %}"
+                         alt="User picture">
+                </div>
+                <div class="user-info">
+                        <span class="user-name">Checho
+                            <strong>Leiva</strong>
+                        </span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Cursos</span>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user-secret"></i>
+                            <span><small><i>CC-xxxx</i><br>Checho</small></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-users"></i>
+                            <span><small><i>CC-4401</i><br>Ingeniería de Software</small></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i>
+                            <span><small><i>CC-xx</i><br>Ramo random</small></span><br>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer"></div>
+    </nav>
+
+    <!-- page-content" -->
+    <div class="page-content">
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h4 class="card-title">Coevaluación I</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn button up-button" type="button">Nueva Coevaluación</button>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="card-subtitle mb-2 text-muted">Ingeniería de Software I</h6>
+                            </div>
+                            <div class="col-md-2 font-weight-bold">Estado</div>
+                            <div class="col-md-10">Abierta</div>
+                            <div class="col-md-2 font-weight-bold">Desde</div>
+                            <div class="col-md-10">15/10/18</div>
+                            <div class="col-md-2 font-weight-bold">Hasta</div>
+                            <div class="col-md-10">27/10/18</div>
+                            <div class="col-md-12 text-right">
+                                <a href="#"><i class="fas fa-edit"></i></a>
+                                <a href="#"><i class="fas fa-download"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-members" role="tab"
+                       aria-controls="nav-profile" aria-selected="true">Contestada Por</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-groups" role="tab"
+                       aria-controls="nav-contact" aria-selected="false">Sin Contestar</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-members" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="table-responsive">
+                        <table id="integrantes" class="table sortable excel txt">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th class="number">Nº</th>
+                                <th class="string" colspan="2">Integrante</th>
+                                <th class="opciones">Opciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/84/8443889a0b214d4b319c786e8b75a321/datos_usuario/a76c11175d95a39840168400e54980b3.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/8443889a0b214d4b319c786e8b75a321/">Alex
+                                            Álvarez T.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54896ee6.24607167"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[8443889a0b214d4b319c786e8b75a321]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54896ee6.24607167').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://ucampus.uchile.cl/d/r/usuario/56/56556ebb9f2f063a67a085e300079240/perfil/0ea273112dc85485c15b86a0e9269815.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/56556ebb9f2f063a67a085e300079240/">Mauricio
+                                            Araneda H.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54896f52.95092221"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[56556ebb9f2f063a67a085e300079240]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54896f52.95092221').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/images/siglas/JB.svg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/ba206cb162ed2fe60b93d8c2612a892e/">José
+                                            Berrocal</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54896fb6.42805801"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[ba206cb162ed2fe60b93d8c2612a892e]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54896fb6.42805801').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/85/85ed4afc75c1619c48255d01eb79e9b2/datos_usuario/av_5534b816ade37.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/85ed4afc75c1619c48255d01eb79e9b2/">Víctor
+                                            Caro</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897939.87228907"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[85ed4afc75c1619c48255d01eb79e9b2]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897939.87228907').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/87/87268c71cf63cb62f8575e39fae1eae7/datos_usuario/av_5801a39eb8d3f.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/87268c71cf63cb62f8575e39fae1eae7/">Bárbara
+                                            Castro</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d548979b3.47358856"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[87268c71cf63cb62f8575e39fae1eae7]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d548979b3.47358856').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/54/54dec56515136fd2f0b5ed883197481e/datos_usuario/av_57d7b9c6e48e8.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/54dec56515136fd2f0b5ed883197481e/">Gabriel
+                                            Chaperon B.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897a18.65672571"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[54dec56515136fd2f0b5ed883197481e]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897a18.65672571').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/5a/5af985720d6789ba76fd750752166bd8/datos_usuario/av_59ee37213b3d3.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/5af985720d6789ba76fd750752166bd8/">Raúl
+                                            Cid Bastias</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897a70.80310936"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[5af985720d6789ba76fd750752166bd8]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897a70.80310936').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/54/54fd34e39e0432b970068ebb5e108fff/datos_usuario/av_57cb34b860dc7.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/54fd34e39e0432b970068ebb5e108fff/">Sebastián
+                                            Cisneros Pinto</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897ad5.44512666"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[54fd34e39e0432b970068ebb5e108fff]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897ad5.44512666').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/48/48d4e149e6a824f5ea25e2414551ad3a/datos_usuario/av_552c8511a7549.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/48d4e149e6a824f5ea25e2414551ad3a/">Catalina
+                                            Contreras R.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897b36.56518438"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[48d4e149e6a824f5ea25e2414551ad3a]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897b36.56518438').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/2a/2a52522df920c1b35d46ca85ad753206/datos_usuario/av_558b861b49d67.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/2a52522df920c1b35d46ca85ad753206/">Kyra
+                                            Cossio G.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54897b94.87858590"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[2a52522df920c1b35d46ca85ad753206]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54897b94.87858590').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>23</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/images/siglas/FM.svg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/24b9990d704735e073d362321d534df6/">Francisco
+                                            Muñoz</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898730.53034721"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[24b9990d704735e073d362321d534df6]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898730.53034721').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/b1/b1d309a892fd3918d372e3a953939b2d/datos_usuario/av_570bcea301196.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/b1d309a892fd3918d372e3a953939b2d/">Karina
+                                            Parga</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898799.09077454"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[b1d309a892fd3918d372e3a953939b2d]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898799.09077454').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>25</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/images/siglas/IP.svg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/5fb3edaa1f423023e28178e73d47bad5/">Israel
+                                            Peña S.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898804.48103427"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[5fb3edaa1f423023e28178e73d47bad5]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898804.48103427').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/bb/bb576e7a5797546dad60bcd6d7bba05c/datos_usuario/av_5aa9d95f4b1f4.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/bb576e7a5797546dad60bcd6d7bba05c/">Matías
+                                            Pizarro O.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898987.07770591"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[bb576e7a5797546dad60bcd6d7bba05c]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898987.07770591').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/8f/8f9a83cbec023f8f35ea93df2691f417/datos_usuario/av_59ffe4f6160cb.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/8f9a83cbec023f8f35ea93df2691f417/">Matías
+                                            Ramírez</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898a50.77102768"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[8f9a83cbec023f8f35ea93df2691f417]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898a50.77102768').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/4f/4f1d582fe00ff99a27fbe7adc7e86da5/datos_usuario/av_58d7c7fc60211.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/4f1d582fe00ff99a27fbe7adc7e86da5/">Matías
+                                            Rojas</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54898b05.88920383"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[4f1d582fe00ff99a27fbe7adc7e86da5]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54898b05.88920383').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/ac/ac43c4e3ac7caf4cbb18d6136ab94da4/datos_usuario/av_58cbfbb535cb6.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/ac43c4e3ac7caf4cbb18d6136ab94da4/">Jhon
+                                            Maycol Bryan Salgado Uribe</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54899542.70591466"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[ac43c4e3ac7caf4cbb18d6136ab94da4]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54899542.70591466').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>30</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/b4/b4a73bd63af61ebe3a951522cf5197be/datos_usuario/av_54346f8398ee7.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/b4a73bd63af61ebe3a951522cf5197be/">Ignacio
+                                            Slater M.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54899648.14082781"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[b4a73bd63af61ebe3a951522cf5197be]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54899648.14082781').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-groups" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <div class="table-responsive">
+                        <table id="integrantes" class="table sortable excel txt">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th class="number">Nº</th>
+                                <th class="string" colspan="2">Integrante</th>
+                                <th class="opciones">Opciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                                        <tr>
+                                <td>31</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/images/siglas/JT.svg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/5595790028e7d4b16d5283c27ff186d3/">Jorge
+                                            Toloza V.</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54899754.40556368"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[5595790028e7d4b16d5283c27ff186d3]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54899754.40556368').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>32</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/r/usuario/31/31664ca910ab7d9a1bad1d27ce7b9e5d/datos_usuario/av_57150ef8c45f9.jpg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/31664ca910ab7d9a1bad1d27ce7b9e5d/">María
+                                            José Trujillo Berger</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d548997e0.68274174"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[31664ca910ab7d9a1bad1d27ce7b9e5d]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d548997e0.68274174').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>33</td>
+                                <td>
+                                    <p>
+                                        <span class="u_avatar"><img alt="" class="logo avatar chica"
+                                                                    src="https://static.u-cursos.cl/images/siglas/JV.svg"/></span>
+                                        <a href="https://www.u-cursos.cl/usuario/c1e07447bd97ab0efd65c30bbe0fdd94/">José
+                                            Vergara</a></p>
+
+                                    </p>
+                                </td>
+
+                                <td>
+                                </td>
+
+                                <td>
+                                    <form id="correo_5bc54d54899849.30102173"
+                                          action="https://www.u-cursos.cl/ingenieria/2018/2/CC4401/1/correo//enviar"
+                                          method="post"><input type="hidden"
+                                                               name="mails[c1e07447bd97ab0efd65c30bbe0fdd94]"
+                                                               value="1"/><a
+                                            href="javascript:$('correo_5bc54d54899849.30102173').submit()">Revisar</a>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- page-wrapper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="{% static 'coevaluador/js/custom.js' %}"></script>
+</body>
