@@ -144,221 +144,209 @@
                  width="20" height="20">Cargar archivo...</a>
     </div>
     <hr/>
-    <div class="row">
-        <!-- Tabla de alumnos/as -->
-        <div class="col-md-4">
-            <h4 class="d-inline-block mt-1">Estudiantes</h4>
-            <button type="button" id="add-coev-btn" class="btn btn-primary-custom float-right">Agregar alumno</button>
+    <div class="row mb-5">
+        <div class="col-md-6 text-center">
+            <form>
+                <input class="form-control width-auto float-right" type="search" placeholder="Buscar alumno..."
+                       aria-label="Buscar alumno">
+            </form>
+        </div>
 
-            <div class="table-wrap table-responsive my-1">
-                <table class="table table-alumnos-curso table-striped table-hover mb-0">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>
-                            <form>
-                                <input class="form-control" type="search" placeholder="Buscar alumno..."
-                                       aria-label="Buscar alumno">
-                            </form>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr id="active-estudiante" onclick="showGestionEstudiante()">
-                        <td>Estudiante 1 (clickeable)</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 2</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 3</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 4</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 5</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 6</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 7</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 8</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 9</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 10</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 11</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 12</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 13</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 14</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 15</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 16</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 17</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 18</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 19</td>
-                    </tr>
-                    <tr>
-                        <td>Estudiante 20</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="col-md-6 text-center">
+            <button type="button" id="add-coev-btn" class="btn btn-primary-custom float-left">Agregar alumno
+            </button>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-12 text-center">
+            <button type="button" id="add-coev-btn" class="btn btn-primary-custom float-left">Agregar grupo</button>
         </div>
 
         <!-- Tabla de grupos -->
-        <div class="col-md-4">
-            <h4 class="d-inline-block mt-1">Grupos</h4>
-            <button type="button" id="add-coev-btn" class="btn btn-primary-custom float-right">Agregar grupo</button>
-
-            <div class="table-wrap table-responsive my-1">
-                <table class="table table-grupos-curso table-striped table-hover mb-0">
+        <div class="col-md-6">
+            <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                <table class="table table-coeval-curso table-striped table-hover mb-0"> <!-- Tabla -->
+                    <!-- Encabezados de tabla (Table Headers) -->
                     <thead class="thead-light">
-                    <tr>
-                        <th>
-                            <form>
-                                <input class="form-control" type="search" placeholder="Buscar grupo..."
-                                       aria-label="Buscar alumno">
-                            </form>
-                        </th>
+                    <tr> <!-- Fila (Table Row) -->
+                        <th class="th-grupo">Error 418</th>
+                        <th class="th-t1">Tarea 1</th>
+                        <th class="th-t2">Tarea 2</th>
                     </tr>
                     </thead>
+
+                    <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
-                    <tr id="active-grupo" onclick="showGestionGrupo()">
-                        <td>1</td>
-                        <td>Nombre grupo 1 (clickeable)</td>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Santiago Gil
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
                     </tr>
                     <tr>
-                        <td>2</td>
-                        <td>Nombre grupo 2</td>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Matías Pizarro
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
                     </tr>
                     <tr>
-                        <td>3</td>
-                        <td>Nombre grupo 3</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Nombre grupo 4</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Nombre grupo 5</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Nombre grupo 6</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Nombre grupo 7</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Nombre grupo 8</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>Nombre grupo 9</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>Nombre grupo 10</td>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            María José Trujillo
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Sección de control -->
-        <div class="col-md-4">
-            <div id="gestion-placeholder" class="mt-5">
-                <h5 class="font-weight-normal text-center text-muted">Selecciona un estudiante o grupo para
-                    gestionar</h5>
-            </div>
-            <!-- Gestión de estudiante -->
-            <div id="gestion-estudiante">
-                <h4 class="d-inline-block mt-1">Gestionar estudiante</h4>
-                <div class="gestionar-wrap my-1">
-                    <div class="gestionar-content">
-                        <h6 class="d-inline-block font-weight-bold">Estudiante 1</h6>
-                        <button type="button" class="btn btn-small btn-cancel float-right">Eliminar</button>
-                        <hr/>
-                        <div class="ml-2">
-                            <h6 class="mb-1 text-muted">Grupo:</h6>
-                            <p class="ml-2 d-inline-block">Nombre grupo 1</p>
-                            <button type="button" class="btn btn-small btn-secondary float-right">Gestionar grupo
-                            </button>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-small btn-primary-custom">Cambiar grupo</button>
-                            <button type="button" class="btn btn-small btn-primary-custom">Ver perfil</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- FIN Gestión de estudiante -->
+        <div class="col-md-6">
+            <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                <table class="table table-coeval-curso table-striped table-hover mb-0"> <!-- Tabla -->
+                    <!-- Encabezados de tabla (Table Headers) -->
+                    <thead class="thead-light">
+                    <tr> <!-- Fila (Table Row) -->
+                        <th class="th-grupo">Group 1</th>
+                        <th class="th-t1">Tarea 1</th>
+                        <th class="th-t2">Tarea 2</th>
+                    </tr>
+                    </thead>
 
-            <!-- Gestión de grupo -->
-            <div id="gestion-grupo">
-                <h4 class="d-inline-block mt-1">Gestionar grupo</h4>
-                <div class="gestionar-wrap my-1">
-                    <div class="gestionar-content">
-                        <h6 class="d-inline-block font-weight-bold">Nombre grupo 1
-                            <a href="#" title="Editar nombre">
-                                <img class="clickable-icon mb-1"
-                                     src="{% static 'coevaluador/icon/edit-icon.png' %}"
-                                     alt="Editar nombre" width="13" height="13"></a>
-                        </h6>
-                        <button type="button" class="btn btn-small btn-cancel float-right">Eliminar</button>
-                        <hr/>
-                        <div class="ml-2">
-                            <ul>
-                                <li>Estudiante 1
-                                    <a href="#" title="Quitar estudiante del grupo"><img
-                                            class="clickable-icon ml-1 mb-1"
-                                            src="{% static 'coevaluador/icon/x-icon.png' %}"
-                                            alt="Quitar estudiante del grupo" width="13" height="13"></a></li>
-                                <li>Estudiante 2
-                                    <a href="#" title="Quitar estudiante del grupo"><img
-                                            class="clickable-icon ml-1 mb-1"
-                                            src="{% static 'coevaluador/icon/x-icon.png' %}"
-                                            alt="Quitar estudiante del grupo" width="13" height="13"></a></li>
-                                <li>Estudiante 3
-                                    <a href="#" title="Quitar estudiante del grupo"><img
-                                            class="clickable-icon ml-1 mb-1"
-                                            src="{% static 'coevaluador/icon/x-icon.png' %}"
-                                            alt="Quitar estudiante del grupo" width="13" height="13"></a></li>
-                                <li><a href="#">Agregar estudiante...</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                    <!-- Cuerpo de tabla (Table Data) -->
+                    <tbody>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 1
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 2
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 3
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <!-- FIN Gestión de grupo -->
         </div>
-        <!-- FIN Sección de control -->
+
+        <div class="col-md-6">
+            <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                <table class="table table-coeval-curso table-striped table-hover mb-0"> <!-- Tabla -->
+                    <!-- Encabezados de tabla (Table Headers) -->
+                    <thead class="thead-light">
+                    <tr> <!-- Fila (Table Row) -->
+                        <th class="th-grupo">Group 2</th>
+                        <th class="th-t1">Tarea 1</th>
+                        <th class="th-t2">Tarea 2</th>
+                    </tr>
+                    </thead>
+
+                    <!-- Cuerpo de tabla (Table Data) -->
+                    <tbody>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 1
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 2
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 3
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                <table class="table table-coeval-curso table-striped table-hover mb-0"> <!-- Tabla -->
+                    <!-- Encabezados de tabla (Table Headers) -->
+                    <thead class="thead-light">
+                    <tr> <!-- Fila (Table Row) -->
+                        <th class="th-grupo">Group 3</th>
+                        <th class="th-t1">Tarea 1</th>
+                        <th class="th-t2">Tarea 2</th>
+                    </tr>
+                    </thead>
+
+                    <!-- Cuerpo de tabla (Table Data) -->
+                    <tbody>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 1
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 2
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    <tr>
+                        <!-- Nombre de miembro del equipo -->
+                        <td class="td-members">
+                            Member 3
+                        </td>
+                        <!-- Calificación -->
+                        <td class="td-calificación">7.0</td>
+                        <td class="td-calificación">6.8</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
