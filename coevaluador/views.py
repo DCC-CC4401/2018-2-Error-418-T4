@@ -1,39 +1,40 @@
 from django.shortcuts import render
 
 
-def index(request):
-    return render(request, 'coevaluador/index.html')
+# Use underscore separated words for views like hello_world.
 
 
-def admi(request):
-    return render(request, 'coevaluador/admi.html')
+def login(request):
+    return render(request, 'coevaluador/login.html')
 
 
-def LandingPagePersonaNat(request):
-    return render(request, 'coevaluador/LandingPagePersonaNat.html')
+def student_home(request):
+    return render(request, 'coevaluador/studentHome.html')
 
 
-def LandingPageEqD(request):
-    return render(request, 'coevaluador/LandingPageEqD.html')
+def teaching_home(request):
+    return render(request, 'coevaluador/teachingHome.html')
 
 
-def course(request):
-    return render(request, 'coevaluador/course.html')
-
-def courseStudent(request):
-    return render(request, 'coevaluador/courseStudent.html')
-
-def profile(request):
-    return render(request, 'coevaluador/profile.html')
+def student_coevaluation(request):
+    return render(request, 'coevaluador/studentCoevaluation.html')
 
 
-def StudentProfile(request):
-    return render(request, 'coevaluador/StudentProfile.html')
+def teaching_coevaluation(request):
+    return render(request, 'coevaluador/teachingCoevaluation.html')
 
 
-def adminStudentProfile(request):
-    return render(request, 'coevaluador/adminStudentProfile.html')
+def student_course(request):
+    return render(request, 'coevaluador/studentCourse.html')
 
 
-def coevaluation(request):
-    return render(request, 'coevaluador/coev.html')
+def teaching_course(request):
+    return render(request, 'coevaluador/teachingCourse.html')
+
+
+def owner_profile(request):
+    return render(request, 'coevaluador/ownerProfile.html')
+
+
+def teaching_profile(request):
+    return render(request, 'coevaluador/teachingProfile.html')
