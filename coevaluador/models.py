@@ -1,14 +1,12 @@
 from django.db import models
 
-from django import forms
-
 
 class NaturalPerson(models.Model):
     rut = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
-    password = models.CharField(widget=forms.PasswordInput)
+    password = models.CharField(max_length=50)
 
 
 class Course(models.Model):
@@ -24,7 +22,7 @@ class TeachingTeamMember(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
-    password = models.CharField(widget=forms.PasswordInput)
+    password = models.CharField(max_length=50)
     rol = models.CharField(max_length=100)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
@@ -67,7 +65,7 @@ class TeamRecordForStudent(models.Model):
 
 
 class CoevaluationSheet(models.Model):
-    id = models.CharField(max_length=50)
+    id = models.CharField(max_length=50, primary_key=True)
     team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
@@ -84,8 +82,8 @@ class Question(models.Model):
 
 class Answer(models.Model):
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    evaluator = models.ForeignKey(NaturalPerson, on_delete=models.CASCADE)
-    evaluated = models.ForeignKey(NaturalPerson, on_delete=models.CASCADE)
+    evaluator = models.ForeignKey(NaturalPerson, related_name='evaluator', on_delete=models.CASCADE)
+    evaluated = models.ForeignKey(NaturalPerson, related_name='evaluated', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     grade = models.FloatField()
 
@@ -94,7 +92,7 @@ class Admin(models.Model):
     rut = models.CharField(max_length=12, primary_key=True)
     name = models.CharField(max_length=35)
     surname = models.CharField(max_length=35)
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = models.CharField(max_length=50)
 
     def __str__(self):
         return '%s %s' % (self.name, self.surname)
