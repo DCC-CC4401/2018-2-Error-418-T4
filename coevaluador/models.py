@@ -1,12 +1,38 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class NaturalPerson(models.Model):
+class Role(models.Model):
+    STUDENT = 1
+    TEACHER = 2
+    AUXILIARY = 3
+    AIDE = 4
+    ADMIN = 5
+    ROLE_CHOICES = (
+        (STUDENT, 'student'),
+        (TEACHER, 'teacher'),
+        (AUXILIARY, 'auxiliary'),
+        (AIDE, 'aide'),
+        (ADMIN, 'admin'),
+    )
+
+    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+
+    def __str__(self):
+        return self.get_id_display()
+
+
+class User(AbstractUser):
     rut = models.CharField(max_length=50, primary_key=True)
+    password = models.CharField(max_length=50)
+    roles = models.ManyToManyField(Role)
+
+
+class NaturalPerson(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=50)
 
 
 class Course(models.Model):
@@ -18,13 +44,11 @@ class Course(models.Model):
 
 
 class TeachingTeamMember(models.Model):
-    rut = models.CharField(max_length=50)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=50)
-    rol = models.CharField(max_length=100)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ManyToManyField(Course)
 
 
 class Coevaluation(models.Model):
