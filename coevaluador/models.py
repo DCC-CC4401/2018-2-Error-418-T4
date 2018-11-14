@@ -1,48 +1,25 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
-class User(AbstractUser):
+class User(models.Model):
     rut = models.CharField(max_length=50, primary_key=True)
     password = models.CharField(max_length=50)
+
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+
+    date_joined = models.DateTimeField(default=timezone.now)
+
     is_student = models.BooleanField('student status', default=False)
     is_auxiliary = models.BooleanField('auxiliary status', default=False)
     is_aide = models.BooleanField('teacher status', default=False)
     is_teacher = models.BooleanField('teacher status', default=False)
     is_admin = models.BooleanField('admin status', default=False)
 
-
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user.is_student = True
-
-
-class TeachingTeamMember(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-
-class Teacher(TeachingTeamMember):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user.is_teacher = True
-
-
-class Auxiliary(TeachingTeamMember):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user.is_auxiliary = True
-
-
-class Aide(TeachingTeamMember):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user.is_aide = True
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
 
 class Course(models.Model):
@@ -51,8 +28,8 @@ class Course(models.Model):
     code = models.CharField(max_length=30)
     year = models.IntegerField()
     semester = models.IntegerField()
-    students = models.ManyToManyField(Student)
-    teaching_team_members = models.ManyToManyField(TeachingTeamMember)
+    students = models.ManyToManyField(User)
+    teaching_team_members = models.ManyToManyField(User)
 
 
 class Coevaluation(models.Model):
@@ -66,7 +43,7 @@ class Coevaluation(models.Model):
 
 # Segun yo esto no tiene mucho sentido, pero por mientras lo dejaremos así para ver como sale
 class CourseRecordForStudent(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     rol = models.CharField(max_length=100)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
@@ -83,13 +60,13 @@ class WorkTeam(models.Model):
 
 class TeamMember(models.Model):
     work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class TeamRecordForStudent(models.Model):
     work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class CoevaluationSheet(models.Model):
@@ -97,7 +74,7 @@ class CoevaluationSheet(models.Model):
     team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=100)
     grade = models.FloatField()
 
@@ -110,8 +87,8 @@ class Question(models.Model):
 
 class Answer(models.Model):
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    evaluator = models.ForeignKey(Student, related_name='evaluator', on_delete=models.CASCADE)
-    evaluated = models.ForeignKey(Student, related_name='evaluated', on_delete=models.CASCADE)
+    evaluator = models.ForeignKey(User, related_name='evaluator', on_delete=models.CASCADE)
+    evaluated = models.ForeignKey(User, related_name='evaluated', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     grade = models.FloatField()
 

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import LoginForm
-
+from .models import User
 
 # Use underscore separated words for views like hello_world.
 
@@ -19,9 +19,18 @@ def login(request):
 
             rut = form.cleaned_data['rut']
             password = form.cleaned_data['password']
-            # if ()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('coevaluador:studentHome'))
+            try:
+                user = User.objects.get(rut=rut, password=password)
+                if user.is_teacher or user.is_auxiliary or user.is_aide:
+                    return HttpResponseRedirect(reverse('coevaluador:teachingHome'))
+                if user.is_student:
+                    return HttpResponseRedirect(reverse('coevaluador:studentHome'))
+                if user.is_admin:
+                    return HttpResponseRedirect(reverse('coevaluador:admin'))
+            except User.DoesNotExist:
+                context = {'error': 'El usuario no existe'}
+                return render(request, 'coevaluador/login.html', context)
 
     # if a GET (or any other method) we'll create a blank form
     else:
