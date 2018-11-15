@@ -12,28 +12,42 @@ class User(models.Model):
 
     date_joined = models.DateTimeField(default=timezone.now)
 
-    is_student = models.BooleanField('student status', default=False)
-    is_auxiliary = models.BooleanField('auxiliary status', default=False)
-    is_aide = models.BooleanField('teacher status', default=False)
-    is_teacher = models.BooleanField('teacher status', default=False)
-    is_admin = models.BooleanField('admin status', default=False)
-
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
 
 class Course(models.Model):
-    id = models.CharField(max_length=32, primary_key=True)
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=30)
     year = models.IntegerField()
     semester = models.IntegerField()
-    students = models.ManyToManyField(User)
-    teaching_team_members = models.ManyToManyField(User)
+    students = models.ManyToManyField(User, related_name='courses_as_student')
+    auxiliaries = models.ManyToManyField(User, related_name='courses_as_auxiliary')
+    aides = models.ManyToManyField(User, related_name='courses_as_aide')
+    teachers = models.ManyToManyField(User, related_name='courses_as_teacher')
+
+
+class WorkTeam(models.Model):
+    name = models.CharField(max_length=50)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class TeamMember(models.Model):
+    work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class TeamRecordForStudent(models.Model):
+    work_teams = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Coevaluation(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, primary_key=True)
     n_questions = models.IntegerField()
     status = models.CharField(max_length=50)
     s_date = models.DateField()
@@ -49,34 +63,12 @@ class CourseRecordForStudent(models.Model):
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
 
 
-class WorkTeam(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-class TeamMember(models.Model):
-    work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-class TeamRecordForStudent(models.Model):
-    work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
 class CoevaluationSheet(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
     team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=100)
-    grade = models.FloatField()
 
 
 class Question(models.Model):
