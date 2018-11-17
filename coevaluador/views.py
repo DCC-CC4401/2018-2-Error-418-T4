@@ -57,7 +57,7 @@ def student_coevaluation(request):
         "estudiante2": "Estudiantex2",
         "preguntas": ["Pregunta1", "Pregunta2", "Pregunta3", "Pregunta4"],
         "nombreperfil": "Juanito",
-        "s_date": "fecha inicio",
+        "s_date": "fecha ini",
         "e_date": "Fecha fin"
 
     })
