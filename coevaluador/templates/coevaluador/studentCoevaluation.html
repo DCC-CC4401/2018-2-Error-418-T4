@@ -27,7 +27,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Juanito Pérez</a>
+                <a class="nav-link" href="#">{{ nombreperfil }}</a>
             </li>
             <li class="divider-vertical"></li>
             <li class="nav-item">
@@ -50,21 +50,21 @@
         <div class="col-md-4 mb-3">
             <h4 class="d-inline-block mt-1">Información</h4>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Título</h6>
-            <span>Tarea 1</span>
+            <span>{{ title }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Curso</h6>
-            <span>CC4401 Ingeniería de Software I 2018, Primavera</span>
+            <span>{{ course }}</span>
             <div class="row">
                 <div class="col-6">
                     <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Fecha de inicio</h6>
-                    <span>03:53 20/10/18</span>
+                    <span>{{ s_date }}</span>
                 </div>
                 <div class="col-6">
                     <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Fecha límite</h6>
-                    <span>23:59 27/10/18</span>
+                    <span>{{ e_date }}</span>
                 </div>
             </div>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Estado</h6>
-            <span>Abierta</span>
+            <span>{{ state }}</span>
         </div>
         <!-- FIN Información -->
 
@@ -82,16 +82,18 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Estudiante 1</td>
                         <td class="td-icon"></td>
                     </tr>
-                    <tr class="tr-pendiente" onclick="jumpTo('responder-coeval')">
-                        <td>Estudiante 2 (clickeable)</td>
-                        <td class="td-icon"><a href="#responder-coeval" title="Responder coevaluación">
-                            <img class="clickable-icon answer-icon wiggle"
-                                 src="{% static 'coevaluador/icon/answer-icon.png' %}"
-                                 alt="Responder coevaluación" width="28" height="28"></a></td>
-                    </tr>
+                    {% for a in estudiante1 %}
+                        <tr class="tr-pendiente" onclick="jumpTo('responder-coeval')">
+                            <td>{{ a }}</td>
+                            <td class="td-icon"><a href="#responder-coeval" title="Responder coevaluación">
+                                <img class="clickable-icon answer-icon wiggle"
+                                     src="{% static 'coevaluador/icon/answer-icon.png' %}"
+                                     alt="Responder coevaluación" width="28" height="28"></a></td>
+                        </tr>
+                    {% endfor %}
+
                     <tr>
                         <td>Estudiante 3</td>
                         <td class="td-icon"></td>
@@ -109,92 +111,63 @@
     <div id="responder-coeval" class="row">
         <div class="col-10 offset-1">
             <h5 class="font-italic d-inline-block">Estas respondiendo para:</h5>
-            <h4 class="font-weight-bold d-inline-block ml-1">Estudiante 2</h4>
+            <h4 class="font-weight-bold d-inline-block ml-1">{{ estudiante2 }}</h4>
             <form>
                 <ol>
-                    <div class="criterio-coeval">
+                    {% for pregunta in preguntas %}
                         <li class="h5">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+                            {{ pregunta }}
+                            <div class="criterio-coeval">
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio1"
+                                           value="option1">
+                                    <label class="form-check-label" for="inlineRadio1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio2"
+                                           value="option2">
+                                    <label class="form-check-label" for="inlineRadio2">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio3"
+                                           value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio3"
+                                           value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio3"
+                                           value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">5</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio3"
+                                           value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">6</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio3"
+                                           value="option3">
+                                    <label class="form-check-label" for="inlineRadio3">7</label>
+                                </div>
+                            </div>
                         </li>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                   value="option1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                   value="option2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">3</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">4</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">5</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">6</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">7</label>
-                        </div>
-                    </div>
-                    <div class="criterio-coeval">
-                        <li class="h5">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </li>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                   value="option1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                   value="option2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">3</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">4</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">5</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">6</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                   value="option3">
-                            <label class="form-check-label" for="inlineRadio3">7</label>
-                        </div>
-                    </div>
-                    <div class="criterio-coeval">
-                        <li class="h5">...</li>
-                    </div>
+
+                    {% endfor %}
+
+
                 </ol>
                 <button type="submit" class="btn btn-primary-custom">Enviar coevaluación</button>
             </form>

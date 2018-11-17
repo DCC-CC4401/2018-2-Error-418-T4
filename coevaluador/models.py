@@ -58,7 +58,7 @@ class Coevaluation(models.Model):
     s_date = models.DateField()
     e_date = models.DateField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    question = models.ManyToManyField(Question, on_delete=models.CASCADE)
+    question = models.ManyToManyField(Question)
 
 
 # Segun yo esto no tiene mucho sentido, pero por mientras lo dejaremos así para ver como sale

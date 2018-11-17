@@ -48,7 +48,19 @@ def teaching_home(request):
 
 
 def student_coevaluation(request):
-    return render(request, 'coevaluador/studentCoevaluation.html')
+
+    return render(request, 'coevaluador/studentCoevaluation.html', {
+        "title": "hola",
+        "course": "CC4401 Ingeniería de Software I 2018, Primavera",
+        "state": "estado",
+        "estudiante1": ["Felipe", "Ardila", "Sergio"],
+        "estudiante2": "Estudiantex2",
+        "preguntas": ["Pregunta1", "Pregunta2", "Pregunta3", "Pregunta4"],
+        "nombreperfil": "Juanito",
+        "s_date": "fecha inicio",
+        "e_date": "Fecha fin"
+
+    })
 
 
 def teaching_coevaluation(request):
@@ -61,7 +73,6 @@ def student_course(request):
 
 def teaching_course(request):
     return render(request, 'coevaluador/teachingCourse.html')
-
 
 def owner_profile(request):
     return render(request, 'coevaluador/ownerProfile.html')
