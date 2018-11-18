@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import LoginForm
-from .utils import escape_rut
+from .models import *
 
 
 # Use underscore separated words for views like hello_world.
@@ -21,14 +21,12 @@ def login(request):
             rut = form.cleaned_data['rut']
             rut = escape_rut(rut)
             password = form.cleaned_data['password']
-            print(rut, password)
             user = authenticate(request, rut=rut, password=password)
             if user is not None:
                 lgi(request, user)
                 # Redirect to a success page.
                 return HttpResponseRedirect(reverse('coevaluador:home'))
             else:
-                print(user)
                 # Return an 'invalid login' error message.
                 messages.error(request, "El rut o la contraseña son incorrectas")
                 return HttpResponseRedirect(reverse('coevaluador:login'))
@@ -47,7 +45,28 @@ def logout(request):
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'coevaluador/home.html')
+        user = request.user
+        st = user.courses_as_student.all()
+        au = user.courses_as_auxiliary.all()
+        ai = user.courses_as_aide.all()
+        te = user.courses_as_teacher.all()
+        courses = st.union(au, ai, te)
+        cst = Coevaluation.objects.filter(course__in=st)
+        c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=cst, student=user)
+        cau = Coevaluation.objects.filter(course__in=au)
+        cai = Coevaluation.objects.filter(course__in=ai)
+        cte = Coevaluation.objects.filter(course__in=te)
+        coevaluations = cst.union(cau, cai, cte)
+        context = {
+            'c_sheets': c_sheets.all(),
+            'coevaluations': coevaluations.order_by('e_date').reverse(),
+            'courses': courses.order_by('name'),
+            'courses_as_student': user.courses_as_student.all(),
+            'courses_as_auxiliary': user.courses_as_auxiliary.all(),
+            'courses_as_aide': user.courses_as_aide.all(),
+            'courses_as_teacher': user.courses_as_teacher.all(),
+        }
+        return render(request, 'coevaluador/home.html', context)
     else:
         form = LoginForm()
         return render(request, 'coevaluador/login.html', {'form': form})

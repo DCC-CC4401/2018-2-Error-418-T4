@@ -24,10 +24,15 @@ class UserManager(BaseUserManager):
         if validate(rut) is False:
             raise ValueError('The given rut is not valid')
         rut = escape_rut(rut)
-        user = self.model(rut=rut, first_name=first_name, last_name=last_name, email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+        try:
+            self.get(rut=rut)
+            raise KeyError('User is already registered')
+
+        except User.DoesNotExist:
+            user = self.model(rut=rut, first_name=first_name, last_name=last_name, email=email, **extra_fields)
+            user.set_password(password)
+            user.save(using=self._db)
+            return user
 
     def create_user(self, rut, first_name, last_name, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
@@ -117,20 +122,26 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Question(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     question = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.question
 
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=30)
+    section = models.IntegerField()
     year = models.IntegerField()
     semester = models.IntegerField()
     students = models.ManyToManyField(User, related_name='courses_as_student')
-    auxiliaries = models.ManyToManyField(User, related_name='courses_as_auxiliary')
-    aides = models.ManyToManyField(User, related_name='courses_as_aide')
+    auxiliaries = models.ManyToManyField(User, related_name='courses_as_auxiliary', blank=True)
+    aides = models.ManyToManyField(User, related_name='courses_as_aide', blank=True)
     teachers = models.ManyToManyField(User, related_name='courses_as_teacher')
     questions = models.ManyToManyField(Question, blank=True)
+
+    def __str__(self):
+        return '%s-%d %s' % (self.code, self.section, self.name)
 
 
 class WorkTeam(models.Model):
@@ -138,12 +149,15 @@ class WorkTeam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return '%s | %s' % (self.name, self.course)
 
 
 class TeamMember(models.Model):
     work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s / %s' % (self.student, self.work_team)
 
 
 class TeamRecordForStudent(models.Model):
@@ -153,12 +167,15 @@ class TeamRecordForStudent(models.Model):
 
 
 class Coevaluation(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
     status = models.CharField(max_length=50)
     s_date = models.DateField()
     e_date = models.DateField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     question = models.ManyToManyField(Question)
+
+    def __str__(self):
+        return '%s / %s' % (self.name, self.course)
 
 
 # Segun yo esto no tiene mucho sentido, pero por mientras lo dejaremos así para ver como sale
@@ -169,26 +186,27 @@ class CourseRecordForStudent(models.Model):
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
 
 
-class Answer(models.Model):
+class CoevaluationSheet(models.Model):
+    team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=100)
+
+    def __str__(self):
+        return '%s / %s / %s' % (self.coevaluation, self.student, self.status)
+
+
+class Answer(models.Model):
+    coevaluation_sheet = models.ForeignKey(CoevaluationSheet, on_delete=models.CASCADE)
     evaluator = models.ForeignKey(User, related_name='evaluator', on_delete=models.CASCADE)
     evaluated = models.ForeignKey(User, related_name='evaluated', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.CharField(max_length=1000)
 
 
-class CoevaluationSheet(models.Model):
-    team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
-    coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)  # Many To Many????
-    status = models.CharField(max_length=100)
-    answers = models.ForeignKey(Answer, on_delete=models.CASCADE, blank=True)
-
-
 class Admin(models.Model):
     rut = models.CharField(max_length=50, primary_key=True)
     password = models.CharField(max_length=50)
-
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
     email = models.EmailField(blank=True)
