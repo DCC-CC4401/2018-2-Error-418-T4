@@ -1,0 +1,32 @@
+{% extends 'coevaluador/base.html' %}
+{% block content %}
+    <!-- Barra superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+        <a class="navbar-brand" href="#">Sistema de Coevaluaciones DCC</a>
+        <!-- Al achicar la pantalla, el menú se oculta y se vuelve desplegable mediante este botón. -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    <i class="fa fa-navicon"></i>
+                </span>
+        </button>
+    </nav>
+    <!-- FIN Barra superior -->
+
+    <!-- Cuerpo -->
+    <div class="container text-center"> <!-- Contenedor responsivo, se adapta a la pantalla con puntos de quiebre. -->
+
+        <h1 class="mt-5 mb-3">Vuelve Pronto!</h1>
+        <h3 class="font-weight-normal mb-3">Gracias por utilizar esta plataforma!</h3>
+        <a class="mb-2" href="{% url 'coevaluador:login' %}">Ingresar nuevamente</a>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        </form>
+    </div>
+{% endblock content %}

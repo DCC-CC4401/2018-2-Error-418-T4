@@ -8,7 +8,7 @@ class LoginForm(forms.Form):
                                                         'placeholder': 'RUT',
                                                         'required': True,
                                                         'autofocus': True}))
-    
+
     password = forms.CharField(widget=forms.PasswordInput(attrs={'id': 'input-password',
                                                                  'class': 'form-control',
                                                                  'placeholder': 'Contraseña',

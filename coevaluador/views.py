@@ -1,12 +1,14 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as lgi, logout as lgo
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import LoginForm
-from .models import User
+from .utils import escape_rut
+
 
 # Use underscore separated words for views like hello_world.
-
 
 def login(request):
     # if this is a POST request we need to process the form data
@@ -16,27 +18,39 @@ def login(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-
             rut = form.cleaned_data['rut']
+            rut = escape_rut(rut)
             password = form.cleaned_data['password']
-            # redirect to a new URL:
-            try:
-                user = User.objects.get(rut=rut, password=password)
-                if user.is_teacher or user.is_auxiliary or user.is_aide:
-                    return HttpResponseRedirect(reverse('coevaluador:teachingHome'))
-                if user.is_student:
-                    return HttpResponseRedirect(reverse('coevaluador:studentHome'))
-                if user.is_admin:
-                    return HttpResponseRedirect(reverse('coevaluador:admin'))
-            except User.DoesNotExist:
-                context = {'error': 'El usuario no existe'}
-                return render(request, 'coevaluador/login.html', context)
+            print(rut, password)
+            user = authenticate(request, rut=rut, password=password)
+            if user is not None:
+                lgi(request, user)
+                # Redirect to a success page.
+                return HttpResponseRedirect(reverse('coevaluador:home'))
+            else:
+                print(user)
+                # Return an 'invalid login' error message.
+                messages.error(request, "El rut o la contraseña son incorrectas")
+                return HttpResponseRedirect(reverse('coevaluador:login'))
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
 
     return render(request, 'coevaluador/login.html', {'form': form})
+
+
+def logout(request):
+    lgo(request)
+    return render(request, 'coevaluador/logout.html')
+
+
+def home(request):
+    if request.user.is_authenticated:
+        return render(request, 'coevaluador/home.html')
+    else:
+        form = LoginForm()
+        return render(request, 'coevaluador/login.html', {'form': form})
 
 
 def student_home(request):
