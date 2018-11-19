@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="{% static 'coevaluador/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'coevaluador/js/coeval.js' %}"></script>
-    <title>Juanito Pérez - Sistema de Coevaluaciones DCC</title>
+    <title>Sistema de Coevaluaciones DCC</title>
 </head>
 <body>
 <!-- Barra superior -->
@@ -27,11 +27,11 @@
         <ul class="navbar-nav ml-auto">
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Juanito Pérez</a>
+                <a class="nav-link" href="#"> {{ student.get_full_name }} </a>
             </li>
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Cerrar Sesión</a>
+                <a class="nav-link" href="{% url 'coevaluador:logout' %}">Cerrar Sesión</a>
             </li>
         </ul>
     </div>
@@ -50,15 +50,14 @@
         <div class="col-md-3 mb-3">
             <h4 class="d-inline-block mt-1">Tu Perfil</h4>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Nombre</h6>
-            <span>Juanito Juan Pérez Pereira</span>
+            <span>{{ student.get_full_name }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">RUT</h6>
-            <span>12.345.678-9</span>
+            <span>{{ student.rut }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Correo Electrónico</h6>
-            <span>lorem@ipsum.com</span>
+            <span>{{ student.email }}</span>
             <button type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block" onclick="changePass()">
                 Cambiar contraseña
             </button>
-            <span class="small">(clickeable)</span>
         </div>
         <!-- FIN Perfil -->
 
@@ -77,39 +76,19 @@
                     </thead>
                     <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
-                    <tr id="row-btn" onclick="showNotas()">
-                        <td class="td-curso-full">
-                            <div class="cargos cargos-alumno tooltip-custom">
-                                <span class="tooltiptext"></span>
-                            </div>
-                            <span class="curso-nombre">Proyecto de Software (clickeable)</span>
-                            <br>
-                            <span class="curso-codigo">CC5402-1</span>
-                        </td>
-                        <td>2018-2</td>
-                    </tr>
-                    <tr>
-                        <td class="td-curso-full">
-                            <div class="cargos cargos-alumno tooltip-custom">
-                                <span class="tooltiptext"></span>
-                            </div>
-                            <span class="curso-nombre">Ingeniería de Software II</span>
-                            <br>
-                            <span class="curso-codigo">CC5401-1</span>
-                        </td>
-                        <td>2018-1</td>
-                    </tr>
-                    <tr>
-                        <td class="td-curso-full">
-                            <div class="cargos cargos-alumno tooltip-custom">
-                                <span class="tooltiptext"></span>
-                            </div>
-                            <span class="curso-nombre">Ingeniería de Software I</span>
-                            <br>
-                            <span class="curso-codigo">CC4401-1</span>
-                        </td>
-                        <td>2017-2</td>
-                    </tr>
+                    {% for course in courses %}
+                        <tr id="row-btn" onclick="showNotas()">
+                            <td class="td-curso-full">
+                                <div class="cargos cargos-alumno tooltip-custom">
+                                    <span class="tooltiptext"></span>
+                                </div>
+                                <span class="curso-nombre">{{ course.name }}</span>
+                                <br>
+                                <span class="curso-codigo">{{ course.code }}</span>
+                            </td>
+                            <td>{{ course.year }} - {{ course.semester }}</td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

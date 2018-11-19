@@ -99,18 +99,26 @@ def teaching_course(request):
 
 
 def owner_profile(request):
-    student_courses = User.objects.get(rut=rut).courses_as_student.order_by("year", "semester")
-    student_coev_sheets = CoevaluationSheet.objects.filter(student=rut)
-    student_coev = list()
-    for obj in student_coev_sheets:
-        student_coev.append(obj.coevaluation)
-    student_coev.sort(key=lambda coev: coev.status)
-    return render(request, 'coevaluador/studentHome.html', {
-        "student_courses": student_courses,
-        "student_coevaluations": student_coev,
-        "student_coevaluation_sheets": student_coev_sheets
-    })
-    return render(request, 'coevaluador/ownerProfile.html')
+    if request.user.is_authenticated:
+        user = request.user
+        st = user.courses_as_student.all()
+        au = user.courses_as_auxiliary.all()
+        ai = user.courses_as_aide.all()
+        te = user.courses_as_teacher.all()
+        courses = st.union(au, ai, te)
+        student_coev_sheets = CoevaluationSheet.objects.filter(student=user.rut)
+        student_coev = list()
+        for obj in student_coev_sheets:
+            student_coev.append(obj.coevaluation)
+        student_coev.sort(key=lambda coev: coev.status)
+        context = {
+            "student": user,
+            "courses": courses,
+            "student_coevaluations": student_coev,
+            "student_coevaluation_sheets": student_coev_sheets
+        }
+        return render(request, 'coevaluador/ownerProfile.html', context)
+
 
 
 def teaching_profile(request):
