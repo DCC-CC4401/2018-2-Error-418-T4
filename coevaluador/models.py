@@ -32,6 +32,9 @@ class Course(models.Model):
     teachers = models.ManyToManyField(User, related_name='courses_as_teacher')
     questions = models.ManyToManyField(Question, blank=True)
 
+    def __str__(self):
+        return '%s' % (self.name)
+
 
 class WorkTeam(models.Model):
     name = models.CharField(max_length=50)
@@ -44,6 +47,9 @@ class WorkTeam(models.Model):
 class TeamMember(models.Model):
     work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s - %s' % (self.work_team, self.student)
 
 
 class TeamRecordForStudent(models.Model):
@@ -58,7 +64,10 @@ class Coevaluation(models.Model):
     s_date = models.DateField()
     e_date = models.DateField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    question = models.ManyToManyField(Question, on_delete=models.CASCADE)
+    question = models.ManyToManyField(Question)
+
+    def __str__(self):
+        return '%s - %s' % (self.course, self.name)
 
 
 # Segun yo esto no tiene mucho sentido, pero por mientras lo dejaremos así para ver como sale

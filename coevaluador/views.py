@@ -2,6 +2,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from coevaluador.models import Coevaluation, CoevaluationSheet
+from .models import Course
 from .forms import LoginForm
 from .models import User
 
@@ -25,7 +27,7 @@ def login(request):
                 if user.is_teacher or user.is_auxiliary or user.is_aide:
                     return HttpResponseRedirect(reverse('coevaluador:teachingHome'))
                 if user.is_student:
-                    return HttpResponseRedirect(reverse('coevaluador:studentHome'))
+                    return HttpResponseRedirect(reverse('coevaluador:studentHome', args=rut))
                 if user.is_admin:
                     return HttpResponseRedirect(reverse('coevaluador:admin'))
             except User.DoesNotExist:
@@ -39,8 +41,18 @@ def login(request):
     return render(request, 'coevaluador/login.html', {'form': form})
 
 
-def student_home(request):
-    return render(request, 'coevaluador/studentHome.html')
+def student_home(request, rut):
+    student_courses = User.objects.get(rut=rut).courses_as_student.order_by("year", "semester")
+    student_coev_sheets = CoevaluationSheet.objects.filter(student=rut)
+    student_coev = list()
+    for obj in student_coev_sheets:
+        student_coev.append(obj.coevaluation)
+    student_coev.sort(key=lambda coev:coev.status)
+    return render(request, 'coevaluador/studentHome.html', {
+        "student_courses":student_courses,
+        "student_coevaluations":student_coev,
+        "student_coevaluation_sheets":student_coev_sheets
+    })
 
 
 def teaching_home(request):
