@@ -88,6 +88,10 @@ def teaching_coevaluation(request):
     return render(request, 'coevaluador/teachingCoevaluation.html')
 
 
+def course(request):
+    return render(request, 'coevaluador/course.html')
+
+
 def student_course(request):
     return render(request, 'coevaluador/studentCourse.html')
 
