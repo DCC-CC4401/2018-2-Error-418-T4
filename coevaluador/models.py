@@ -169,8 +169,8 @@ class TeamRecordForStudent(models.Model):
 class Coevaluation(models.Model):
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=50)
-    s_date = models.DateField()
-    e_date = models.DateField()
+    s_date = models.DateTimeField()
+    e_date = models.DateTimeField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     question = models.ManyToManyField(Question)
 
