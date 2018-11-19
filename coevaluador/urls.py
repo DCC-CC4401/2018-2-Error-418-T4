@@ -6,7 +6,9 @@ app_name = 'coevaluador'
 
 urlpatterns = [
     # This is not specified in Django coding, but please use dash separated names, example: hello-world
-    path('', views.login, name='login'),
+    path('', views.home, name='home'),
+    path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('student-home', views.student_home, name='studentHome'),
     path('teaching-home', views.teaching_home, name='teachingHome'),
     path('student-coevaluation', views.student_coevaluation, name='studentCoevaluation'),
