@@ -1,0 +1,313 @@
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'coevaluador/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'coevaluador/css/coeval.css' %}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="{% static 'coevaluador/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'coevaluador/js/coeval.js' %}"></script>
+    <title>Sistema de Coevaluaciones DCC</title>
+</head>
+<body>
+<!-- Barra superior -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+    <a class="navbar-brand" href="#">Sistema de Coevaluaciones DCC</a>
+    <!-- Al achicar la pantalla, el menú se oculta y se vuelve desplegable mediante este botón. -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    <i class="fa fa-navicon"></i>
+                </span>
+    </button>
+
+    <!-- Menú superior-derecha -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="divider-vertical"></li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'coevaluador:ownerProfile' %}">{{ user.get_full_name }}</a>
+            </li>
+            <li class="divider-vertical"></li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'coevaluador:logout' %}">Cerrar Sesión</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- FIN Barra superior -->
+
+<!-- Cuerpo -->
+<div class="container mt-4"> <!-- Contenedor responsivo, se adapta a la pantalla con puntos de quiebre. -->
+
+    {% if courses_as_auxiliary.exists or courses_as_aide.exists or courses_as_teacher.exists %}
+        <!-- Formulario para agregar una coevaluación. -->
+        <!-- Permanece oculto hasta apretar el botón correspondiente. -->
+        <div id="add-coev-form" class="mb-4">
+            <h4 class="mt-3">Agregar Coevaluación</h4>
+            <form action="#" method="post">
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="titleCoev">Título de la coevaluación</label>
+                        <input type="text" class="form-control" id="titleCoev"
+                               placeholder="ej: Tarea 1, Presentación 3, etc.">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="inputCursoCoev">Curso</label>
+                        <select id="inputCursoCoev" class="form-control">
+                            <option selected>Seleccione un curso...</option>
+                            {% for course in courses %}
+                                {% if course in courses_as_student %}
+                                {% else %}
+                                    <option>{{ course.code }}-{{ course.section }}
+                                 {{ course.name }}, {{ course.year }}-{{ course.semester }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        <label for="dateTimeStartCoEv">Fecha y Hora de inicio</label>
+                        <input type="datetime-local" class="form-control" id="dateTimeStartCoEv">
+                    </div>
+
+                    <div class="form-group col-3 offset-3">
+                        <label for="dateTimeEndCoev">Fecha y Hora límite</label>
+                        <input type="datetime-local" class="form-control" id="dateTimeEndCoev" placeholder="dd/mm/yyyy">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary-custom">Confirmar</button>
+                <button type="button" class="btn btn-cancel" onclick="cancelAdd()">Cancelar</button>
+            </form>
+            <hr/>
+        </div>
+        <!-- FIN Formulario agregar coevaluación -->
+    {% endif %}
+
+    {% if courses_as_teacher.exists %}
+        <!-- Formulario para agregar un curso. -->
+        <!-- Permanece oculto hasta apretar el botón correspondiente. -->
+        <div id="add-curso-form" class="mb-4">
+            <h4 class="mt-3">Agregar Curso</h4>
+            <form action="#" method="post">
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label for="codigoCurso">Código del curso</label>
+                        <input type="text" class="form-control" id="codigoCurso" placeholder="ej: CC4401">
+                    </div>
+                    <div class="form-group col-1">
+                        <label for="seccionCurso">Sección</label>
+                        <input type="number" class="form-control" id="seccionCurso" value="1" placeholder="">
+                    </div>
+                    <div class="form-group col-1 offset-1">
+                        <label for="annoCurso">Año</label>
+                        <input type="text" class="form-control" id="annoCurso" placeholder="ej: 2018">
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="semestreCurso">Semestre</label>
+                        <select id="semestreCurso" class="form-control">
+                            <option selected>Seleccione un semestre...</option>
+                            <option>Otoño - Primer semestre</option>
+                            <option>Primavera - Segundo semestre</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary-custom">Confirmar</button>
+                <button type="button" class="btn btn-cancel" onclick="cancelAdd()">Cancelar</button>
+            </form>
+            <hr/>
+        </div>
+        <!-- FIN Formulario agregar curso -->
+    {% endif %}
+
+    <!-- Tablas de resumen -->
+    <div class="row">
+        <!-- Tabla de coevaluaciones -->
+        <div class="col-md-9">
+            <h4 class="d-inline-block mt-1">Últimas Coevaluaciones</h4>
+
+            {% if courses_as_auxiliary.exists or courses_as_aide.exists or courses_as_teacher.exists %}
+                <button type="button" id="add-coev-btn" class="btn btn-primary-custom float-right" onclick="addCoev()">
+                    Agregar coevaluación
+                </button>
+            {% endif %}
+
+            <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                <table class="table table-coeval table-striped table-hover mb-0"> <!-- Tabla -->
+                    <!-- Encabezados de tabla (Table Headers) -->
+                    <thead class="thead-light">
+                    <tr> <!-- Fila (Table Row) -->
+                        <th class="th-fecha">Fecha inicio</th>
+                        <th class="th-titulo">Nombre</th>
+                        <th class="th-curso">Curso</th>
+                        <th class="th-semestre">Sem</th>
+                        <th class="th-fecha">Fecha límite</th>
+                        <th class="th-estado">Estado</th>
+                        <th class="th-iconos"></th>
+                    </tr>
+                    </thead>
+
+                    <!-- Cuerpo de tabla (Table Data) -->
+                    <tbody>
+                    {% for c in coevaluations %}
+                        {% if c.course in courses_as_student %}
+                            {% for s in c_sheets %}
+                                {% if s.coevaluation == c %}
+                                    {% with s as cs %}
+                                        <tr {% if cs.status == 'Pendiente' %}
+                                            class="tr-pendiente"
+                                        {% endif %}> <!-- Fila destacada como Pendiente -->
+                                            <!-- Fecha de inicio -->
+                                            <td class="td-fecha">
+                                                {{ c.s_date|date:"d/m/y" }}
+                                                {{ c.s_date|time:"H:i" }}
+                                            </td>
+                                            <!-- Título de coevaluación -->
+                                            <td>{{ c.name }}</td>
+                                            <!-- Curso, con ícono de rol, nombre y código -->
+                                            <td class="td-curso-full">
+                                                <div class="cargos cargos-alumno tooltip-custom">
+                                                    <span class="tooltiptext"></span>
+                                                </div>
+                                                <span class="curso-nombre">{{ c.course.name }}</span>
+                                                <br>
+                                                <span class="curso-codigo">{{ c.course.code }}-{{ c.course.section }}</span>
+                                            </td>
+                                            <!-- Semestre -->
+                                            <td>{{ c.course.year }}-{{ c.course.semester }}</td>
+                                            <!-- Fecha de término -->
+                                            <td class="td-fecha">
+                                                {{ c.e_date|date:"d/m/y" }}
+                                                {{ c.e_date|time:"H:i" }}
+                                            </td>
+                                            <!-- Estado -->
+                                            <td>{{ cs.status }}</td>
+                                            <!-- Ícono de acción (responder) -->
+                                            <td class="td-icon">
+                                                {% if cs.status == 'Pendiente' %}
+                                                    <a href="#" title="Responder coevaluación">
+                                                        <img class="clickable-icon answer-icon wiggle"
+                                                             src="{% static 'coevaluador/icon/answer-icon.png' %}"
+                                                             alt="Responder coevaluación" width="28"
+                                                             height="28">
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endwith %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <tr> <!-- Fila destacada como Pendiente -->
+                                <!-- Fecha de inicio -->
+                                <td class="td-fecha">
+                                    {{ c.s_date|date:"d/m/y" }}
+                                    {{ c.s_date|time:"H:i" }}
+                                    <!-- Ícono de lápiz -->
+                                    <a href="#" title="Editar fecha de inicio">
+                                        <img class="clickable-icon mb-1"
+                                             src="{% static 'coevaluador/icon/edit-icon.png' %}" alt="editar fecha"
+                                             width="13" height="13">
+                                    </a>
+                                </td>
+                                <!-- Título de coevaluación -->
+                                <td>{{ c.name }}</td>
+                                <!-- Curso, con ícono de rol, nombre y código -->
+                                <td class="td-curso-full">
+                                    <div class="cargos cargos-{% if c.course in courses_as_teacher %}profesor
+                                        {% elif c.course in courses_as_aide %}ayudante
+                                        {% else %}auxiliar
+                                        {% endif %} tooltip-custom">
+                                        <span class="tooltiptext"></span>
+                                    </div>
+                                    <span class="curso-nombre">{{ c.course.name }}</span>
+                                    <br>
+                                    <span class="curso-codigo">{{ c.course.code }}-{{ c.course.section }}</span>
+                                </td>
+                                <!-- Semestre -->
+                                <td>{{ c.course.year }}-{{ c.course.semester }}</td>
+                                <!-- Fecha de término -->
+                                <td class="td-fecha">
+                                    {{ c.e_date|date:"d/m/y" }}
+                                    {{ c.e_date|time:"H:i" }}
+                                    <!-- Ícono de lápiz -->
+                                    <a href="#" title="Editar fecha de inicio">
+                                        <img class="clickable-icon mb-1"
+                                             src="{% static 'coevaluador/icon/edit-icon.png' %}" alt="editar fecha"
+                                             width="13" height="13">
+                                    </a>
+                                </td>
+                                <!-- Estado -->
+                                <td>{{ c.status }}</td>
+                                <!-- Ícono de acción (responder) -->
+                                <td class="td-icon">
+                                    {% if c.status == 'Cerrada' %}
+                                        <a href="#" title="Publicar resultados">
+                                            <img class="clickable-icon publish-icon wiggle"
+                                                 src="{% static 'coevaluador/icon/publish-icon.png' %}"
+                                                 alt="Publicar resultados" width="28"
+                                                 height="28">
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla de cursos -->
+        <div class="col-md-3 mb-3">
+            <h4 class="d-inline-block mt-1">Tus Cursos</h4>
+
+            {% if courses_as_teacher.exists %}
+                <button type="button" id="add-curso-btn" class="btn btn-primary-custom float-right"
+                        onclick="addCurso()">
+                    Agregar curso
+                </button>
+            {% endif %}
+
+            <div class="table-wrap table-responsive my-1">
+                <table class="table table-cursos table-striped table-hover mb-0">
+                    <!-- Encabezados de tabla (Table Headers) -->
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Curso</th>
+                        <th class="th-semestre">Sem</th>
+                    </tr>
+                    </thead>
+                    <!-- Cuerpo de tabla (Table Data) -->
+                    <tbody>
+                    {% for x in courses %}
+                        <tr>
+                            <td class="td-curso-full">
+                                <a href="{% url 'coevaluador:studentCourse' %}">
+                                    <div class="cargos cargos-{% if x in courses_as_student %}alumno
+                                        {% elif x in courses_as_teacher %}profesor
+                                        {% elif x in courses_as_aide %}ayudante
+                                        {% else %}auxiliar
+                                        {% endif %} tooltip-custom">
+                                        <span class="tooltiptext"></span>
+                                    </div>
+                                    <span class="curso-nombre">{{ x.name }}</span>
+                                    <br>
+                                    <span class="curso-codigo">{{ x.code }}-{{ x.section }}</span>
+
+                                </a>
+                            </td>
+                            <td>{{ x.year }}-{{ x.semester }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
