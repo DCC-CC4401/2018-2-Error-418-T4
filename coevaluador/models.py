@@ -125,7 +125,7 @@ class Question(models.Model):
     question = models.CharField(max_length=500)
     type_choices = (('rango', 'Rango'),
                     ('textbox', 'Cuadro de Texto'),
-                    ('dropdown', 'Opciones desplegables'))
+                    )
 
     type = models.CharField(max_length=100, choices=type_choices, default='rango')
 
@@ -172,8 +172,9 @@ class TeamRecordForStudent(models.Model):
 
 
 class Coevaluation(models.Model):
+    status_choices= (('Abierta', 'Abierta'), ('Cerrada','Cerrada'))
     name = models.CharField(max_length=100)
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, choices=status_choices, default='Abierta')
     s_date = models.DateTimeField()
     e_date = models.DateTimeField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -200,6 +201,9 @@ class CoevaluationSheet(models.Model):
     def __str__(self):
         return '%s / %s / %s' % (self.coevaluation, self.student, self.status)
 
+# class Response(models.Model):
+#     evaluator= models.ForeignKey(User, )
+#     evaluated= models.ForeignKey(User)
 
 class Answer(models.Model):
     coevaluation_sheet = models.ForeignKey(CoevaluationSheet, on_delete=models.CASCADE)

@@ -80,22 +80,30 @@ def teaching_home(request):
     return render(request, 'coevaluador/teachingHome.html')
 
 
-def coevaluation(request):
+
+def coevaluation(request, coev_id, st_id=-1):
     user = request.user
-    if user.is_authenticated and 'id' in request.GET:
-        coevaluation_id = request.GET['id']
-        coevaluation = Coevaluation.objects.filter(id=coevaluation_id).first()
-
-        team = TeamMember.objects.filter(student=user).filter(work_team__course=coevaluation.course).first().work_team
+    if user.is_authenticated and coev_id:
+        coevaluationsheet= CoevaluationSheet.objects.filter(coevaluation_id= coev_id, student= user).first()
+        coevaluation= coevaluationsheet.coevaluation
+        team= coevaluationsheet.team
         members = TeamMember.objects.filter(work_team=team)
+        question=coevaluation.question.all()
 
-        question=Question.objects.filter(course= coevaluation.course)
-        ques=coevaluation.question
+        current_st=-1
+        if st_id>=0:
+            a= members.filter(student_id= st_id).first().student.get_full_name()
+            if not a == user.get_full_name():
+                current_st=a
+
         print("question:",question)
-        print(question.first().type)
+        print(coevaluation.id)
         context = {'coev': coevaluation,
                    "group": members,
-                   "questions": question}
+                   "team": team,
+                   "questions": question,
+                   "current_st": current_st,
+                   "user":user}
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)
     else:
