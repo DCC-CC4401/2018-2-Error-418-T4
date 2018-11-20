@@ -123,6 +123,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Question(models.Model):
     question = models.CharField(max_length=500)
+    type_choices = (('rango', 'Rango'),
+                    ('textbox', 'Cuadro de Texto'),
+                    ('dropdown', 'Opciones desplegables'))
+
+    type = models.CharField(max_length=100, choices=type_choices, default='rango')
 
     def __str__(self):
         return self.question
@@ -172,7 +177,7 @@ class Coevaluation(models.Model):
     s_date = models.DateTimeField()
     e_date = models.DateTimeField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    question = models.ManyToManyField(Question)
+    question = models.ManyToManyField(Question, blank=True)
 
     def __str__(self):
         return '%s / %s' % (self.name, self.course)

@@ -80,20 +80,27 @@ def teaching_home(request):
     return render(request, 'coevaluador/teachingHome.html')
 
 
-def student_coevaluation(request):
+def coevaluation(request):
+    user = request.user
+    if user.is_authenticated and 'id' in request.GET:
+        coevaluation_id = request.GET['id']
+        coevaluation = Coevaluation.objects.filter(id=coevaluation_id).first()
 
-    return render(request, 'coevaluador/studentCoevaluation.html', {
-        "title": "hola",
-        "course": "CC4401 Ingeniería de Software I 2018, Primavera",
-        "state": "estado",
-        "estudiante1": ["Felipe", "Ardila", "Sergio"],
-        "estudiante2": "Estudiantex2",
-        "preguntas": ["Pregunta1", "Pregunta2", "Pregunta3", "Pregunta4"],
-        "nombreperfil": "Juanito",
-        "s_date": "fecha ini",
-        "e_date": "Fecha fin"
+        team = TeamMember.objects.filter(student=user).filter(work_team__course=coevaluation.course).first().work_team
+        members = TeamMember.objects.filter(work_team=team)
 
-    })
+        question=Question.objects.filter(course= coevaluation.course)
+        ques=coevaluation.question
+        print("question:",question)
+        print(question.first().type)
+        context = {'coev': coevaluation,
+                   "group": members,
+                   "questions": question}
+
+        return render(request, 'coevaluador/studentCoevaluation.html', context)
+    else:
+        form = LoginForm()
+        return render(request, 'coevaluador/login.html', {'form': form})
 
 
 def teaching_coevaluation(request):
@@ -106,6 +113,7 @@ def student_course(request):
 
 def teaching_course(request):
     return render(request, 'coevaluador/teachingCourse.html')
+
 
 def owner_profile(request):
     return render(request, 'coevaluador/ownerProfile.html')

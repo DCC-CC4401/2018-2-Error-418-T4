@@ -50,21 +50,21 @@
         <div class="col-md-4 mb-3">
             <h4 class="d-inline-block mt-1">Información</h4>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Título</h6>
-            <span>{{ title }}</span>
+            <span>{{ coev.name }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Curso</h6>
-            <span>{{ course }}</span>
+            <span>{{ coev.course.name }}  {{ coev.course.year }}  , {{ coev.course.semester }}</span>
             <div class="row">
                 <div class="col-6">
                     <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Fecha de inicio</h6>
-                    <span>{{ s_date }}</span>
+                    <span>{{ coev.s_date }}</span>
                 </div>
                 <div class="col-6">
                     <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Fecha límite</h6>
-                    <span>{{ e_date }}</span>
+                    <span>{{ coev.e_date }}</span>
                 </div>
             </div>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Estado</h6>
-            <span>{{ state }}</span>
+            <span>{{ coev.status }}</span>
         </div>
         <!-- FIN Información -->
 
@@ -84,9 +84,9 @@
                     <tr>
                         <td class="td-icon"></td>
                     </tr>
-                    {% for a in estudiante1 %}
+                    {% for a in group %}
                         <tr class="tr-pendiente" onclick="jumpTo('responder-coeval')">
-                            <td>{{ a }}</td>
+                            <td>{{ a.student.get_full_name }}</td>
                             <td class="td-icon"><a href="#responder-coeval" title="Responder coevaluación">
                                 <img class="clickable-icon answer-icon wiggle"
                                      src="{% static 'coevaluador/icon/answer-icon.png' %}"
@@ -114,56 +114,63 @@
             <h4 class="font-weight-bold d-inline-block ml-1">{{ estudiante2 }}</h4>
             <form>
                 <ol>
-                    {% for pregunta in preguntas %}
+                    {% for q in questions %}
                         <li class="h5">
 
-                            {{ pregunta }}
-                            <div class="criterio-coeval">
+                            {{ q.question }}
 
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio1"
-                                           value="option1">
-                                    <label class="form-check-label" for="inlineRadio1">1</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio2"
-                                           value="option2">
-                                    <label class="form-check-label" for="inlineRadio2">2</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3"
-                                           value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">3</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3"
-                                           value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">4</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3"
-                                           value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">5</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3"
-                                           value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">6</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio3"
-                                           value="option3">
-                                    <label class="form-check-label" for="inlineRadio3">7</label>
-                                </div>
-                            </div>
-                        </li>
+                            <div class="criterio-coeval">
+                                {% if q.type == 'rango' %}
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio1"
+                                               value="option1">
+                                        <label class="form-check-label" for="inlineRadio1">1</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio2"
+                                               value="option2">
+                                        <label class="form-check-label" for="inlineRadio2">2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3"
+                                               value="option3">
+                                        <label class="form-check-label" for="inlineRadio3">3</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3"
+                                               value="option3">
+                                        <label class="form-check-label" for="inlineRadio3">4</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3"
+                                               value="option3">
+                                        <label class="form-check-label" for="inlineRadio3">5</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3"
+                                               value="option3">
+                                        <label class="form-check-label" for="inlineRadio3">6</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3"
+                                               value="option3">
+                                        <label class="form-check-label" for="inlineRadio3">7</label>
+                                    </div>
+                                    </div>
+                                    </li>
+
+                                {% endif %}
+                                {%if q.type == 'textbox'%}
+
+                                {% endif %}
 
                     {% endfor %}
 
