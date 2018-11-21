@@ -116,13 +116,15 @@ def coevaluation(request, coev_id, st_id=-1):
         team = WorkTeam.objects.filter(course=coevaluation.course, wt_members__student=user).first()
         members = TeamMember.objects.filter(work_team=team)
         aviable = {}
-        # for member in members:
-        #     if member.student != user:
-        #         cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
-        #                                               coevaluated_id=int(member.student.pk)).first()
-        #         print(member, user)
-        #         print(member.student.pk)
-        #         aviable[member.student.pk] = cs.status
+        for member in members:
+            if member.student != user:
+                cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+                                                      coevaluated_id=int(member.student.pk)).first()
+                print(member, user)
+                print("cs", cs)
+                print(member.student.pk)
+                aviable[member.student.pk] = cs.status
+                print(aviable[member.student.pk])
         # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
         # Como dict[a.id]
         current_st = -1
@@ -138,7 +140,7 @@ def coevaluation(request, coev_id, st_id=-1):
                    "current_st": current_st,
                    "user": user,
                    "coevsheet": coevaluationsheet,
-                   # "aviable": aviable
+                   "aviable": aviable
                    }
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)
