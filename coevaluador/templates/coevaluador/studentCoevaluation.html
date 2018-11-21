@@ -115,12 +115,14 @@
     <h4 class="d-inline-block mt-1 mb-0">Responder coevaluación</h4>
     <hr/>
     <!-- Detalle de coevaluación contestada -->
-    {% if current_st != -1 and coev.status == 'Abierta' %}
+    {% if current_st != -1 and coev.status == 'Abierta' and coevsheet.status == 'not_answered' %}
         <div id="responder-coeval" class="row">
             <div class="col-10 offset-1">
                 <h5 class="font-italic d-inline-block">Estas respondiendo para:</h5>
-                <h4 class="font-weight-bold d-inline-block ml-1">{{ current_st }}</h4>
-                <form>
+                <h4 class="font-weight-bold d-inline-block ml-1">{{ current_st.get_full_name }}</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="evaluated" value={{current_st.id}}>
                     <ol>
                         {% for q in questions %}
                             <li class="h5">
@@ -132,51 +134,51 @@
 
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio1"
-                                                   value="option1">
+                                                   value=1>
                                             <label class="form-check-label" for="inlineRadio1">1</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio2"
-                                                   value="option2">
+                                                   value=2>
                                             <label class="form-check-label" for="inlineRadio2">2</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio3"
-                                                   value="option3">
+                                                   value=3>
                                             <label class="form-check-label" for="inlineRadio3">3</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio3"
-                                                   value="option3">
+                                                   value=4>
                                             <label class="form-check-label" for="inlineRadio3">4</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio3"
-                                                   value="option3">
+                                                   value=5>
                                             <label class="form-check-label" for="inlineRadio3">5</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio3"
-                                                   value="option3">
+                                                   value=6>
                                             <label class="form-check-label" for="inlineRadio3">6</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio"
-                                                   name="inlineRadioOptions{{ q.id }}"
+                                                   name="{{ q.id }}"
                                                    id="inlineRadio3"
-                                                   value="option3">
+                                                   value=7>
                                             <label class="form-check-label" for="inlineRadio3">7</label>
                                         </div>
                                         </div>
@@ -188,7 +190,8 @@
                             {% if q.type == 'textbox' %}
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1"></label>
-                                    <textarea class="form-control" name="textbox{{ q.id }}" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" name="{{ q.id }}" id="exampleFormControlTextarea1"
+                                              rows="3"></textarea>
                                 </div>
 
 
