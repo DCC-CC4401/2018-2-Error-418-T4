@@ -85,7 +85,7 @@
                         <td class="td-icon"></td>
                     </tr>
                     {% for a in group %}
-                        {% if a.student.get_full_name == user.get_full_name or coev.status == 'Cerrada' %}
+                        {% if a.student.get_full_name == user.get_full_name or coev.status == 'closed' %}
                             <tr>
                                 <td>{{ a.student.get_full_name }}</td>
                                 <td class="td-icon"></td>
@@ -95,7 +95,7 @@
                             <tr class="tr-pendiente" onclick="jumpTo('responder-coeval')">
                                 <td>{{ a.student.get_full_name }}</td>
                                 <td class="td-icon">
-                                    <a href={% url 'coevaluador:coevaluation' coev.id a.student_id %}
+                                    <a href="{% url 'coevaluador:coevaluation' coev.id a.student.pk %}"
                                                title="Responder coevaluación">
                                     <img class="clickable-icon answer-icon wiggle"
                                          src="{% static 'coevaluador/icon/answer-icon.png' %}"
@@ -122,7 +122,7 @@
                 <h4 class="font-weight-bold d-inline-block ml-1">{{ current_st.get_full_name }}</h4>
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="evaluated" value={{current_st.id}}>
+                    <input type="hidden" name="evaluated" value={{ current_st.id }}>
                     <ol>
                         {% for q in questions %}
                             <li class="h5">

@@ -162,7 +162,7 @@
                                 {% if s.0 == c %}
                                     <tr {% if s.1 == 'not_answered' %}
                                         class="tr-pendiente"
-                                    {% endif %}> <!-- Fila destacada como Pendiente -->
+                                    {% endif %} onclick="seeCoEv({{ c.pk }})"> <!-- Fila destacada como Pendiente -->
                                         <!-- Fecha de inicio -->
                                         <td class="td-fecha">
                                             {{ c.s_date|date:"d/m/y" }}

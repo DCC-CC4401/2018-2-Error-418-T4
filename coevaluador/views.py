@@ -228,7 +228,6 @@ def teaching_course(request):
     return render(request, 'coevaluador/teachingCourse.html')
 
 
-
 def owner_profile(request):
     if request.user.is_authenticated:
         user = request.user
@@ -237,7 +236,7 @@ def owner_profile(request):
         ai = user.courses_as_aide.all()
         te = user.courses_as_teacher.all()
         courses = st.union(au, ai, te)
-        student_coev_sheets = CoevaluationSheet.objects.filter(student=user.rut)
+        student_coev_sheets = CoevaluationSheet.objects.filter(coevaluator=user)
         student_coev = list()
         for obj in student_coev_sheets:
             student_coev.append(obj.coevaluation)
@@ -253,7 +252,6 @@ def owner_profile(request):
             "student_coevaluation_sheets": student_coev_sheets
         }
         return render(request, 'coevaluador/ownerProfile.html', context)
-
 
 
 def teaching_profile(request):
