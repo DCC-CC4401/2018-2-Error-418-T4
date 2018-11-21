@@ -721,3 +721,7 @@ button:active > .clickable-icon {
     height: 0;
 }
 
+.notas-resumen {
+    display: none;
+}
+

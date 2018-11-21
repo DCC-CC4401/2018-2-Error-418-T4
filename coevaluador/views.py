@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from coevaluador.models import Coevaluation, CoevaluationSheet
+from .models import Course
 from .forms import LoginForm
 from .models import *
 
@@ -209,8 +211,32 @@ def teaching_course(request):
     return render(request, 'coevaluador/teachingCourse.html')
 
 
+
 def owner_profile(request):
-    return render(request, 'coevaluador/ownerProfile.html')
+    if request.user.is_authenticated:
+        user = request.user
+        st = user.courses_as_student.all()
+        au = user.courses_as_auxiliary.all()
+        ai = user.courses_as_aide.all()
+        te = user.courses_as_teacher.all()
+        courses = st.union(au, ai, te)
+        student_coev_sheets = CoevaluationSheet.objects.filter(student=user.rut)
+        student_coev = list()
+        for obj in student_coev_sheets:
+            student_coev.append(obj.coevaluation)
+        student_coev.sort(key=lambda coev: coev.status)
+        context = {
+            "student": user,
+            "courses": courses,
+            'courses_as_student': user.courses_as_student.all(),
+            'courses_as_auxiliary': user.courses_as_auxiliary.all(),
+            'courses_as_aide': user.courses_as_aide.all(),
+            'courses_as_teacher': user.courses_as_teacher.all(),
+            "student_coevaluations": student_coev,
+            "student_coevaluation_sheets": student_coev_sheets
+        }
+        return render(request, 'coevaluador/ownerProfile.html', context)
+
 
 
 def teaching_profile(request):

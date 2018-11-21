@@ -29,17 +29,32 @@ function cancelAdd() {
 
 function changePass() {
     document.getElementById("cambiar-contrasena").style.display = "block";
-    document.getElementById("notas-resumen").style.display = "none";
+     let nr = document.getElementsByClassName("notas-resumen");
+    let l = nr.length;
+    for (let i = 0; i < l; i++) {
+        nr[i].style.display = 'none';
+    }
     document.getElementById("notas-placeholder").style.display = "none";
     document.getElementById("change-pass-btn").classList.add("active");
     document.getElementById("row-btn").classList.remove("active");
 }
 
-function showNotas() {
+function showNotas(code) {
+    console.log(code);
     document.getElementById("cambiar-contrasena").style.display = "none";
-    document.getElementById("notas-resumen").style.display = "block";
+    let nr = document.getElementsByClassName("notas-resumen");
+    let l = nr.length;
+    for (let i = 0; i < l; i++) {
+        nr[i].style.display = 'none';
+    }
+    document.getElementById("notas-resumen-"+code).style.display = "block";
     document.getElementById("notas-placeholder").style.display = "none";
-    document.getElementById("row-btn").classList.add("active");
+    let active = document.getElementsByClassName("disp");
+    let s = active.length;
+    for (let i = 0; i < s; i++) {
+        active[i].classList.remove("active");
+    }
+    document.getElementById("row-btn-"+code).classList.add("active");
     var changePass = document.getElementById("change-pass-btn");
     if (changePass !== null) changePass.classList.remove("active");
 }
