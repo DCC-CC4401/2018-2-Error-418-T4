@@ -159,8 +159,8 @@
                     {% for c in coevaluations %}
                         {% if c.course in courses_as_student %}
                             {% for s in c_sheets %}
-                                {% if s.coevaluation == c %}
-                                    <tr {% if s.status == 'Pendiente' %}
+                                {% if s.0 == c %}
+                                    <tr {% if s.1 == 'not_answered' %}
                                         class="tr-pendiente"
                                     {% endif %}> <!-- Fila destacada como Pendiente -->
                                         <!-- Fecha de inicio -->
@@ -187,10 +187,14 @@
                                             {{ c.e_date|time:"H:i" }}
                                         </td>
                                         <!-- Estado -->
-                                        <td>{{ s.status }}</td>
+                                        <td>
+                                            {% if s.1 == 'answered' %}Contestada
+                                            {% else %}Pendiente
+                                            {% endif %}
+                                        </td>
                                         <!-- Ícono de acción (responder) -->
                                         <td class="td-icon">
-                                            {% if s.status == 'Pendiente' %}
+                                            {% if s.1 == 'not_answered' %}
                                                 <a href="#" title="Responder coevaluación">
                                                     <img class="clickable-icon answer-icon wiggle"
                                                          src="{% static 'coevaluador/icon/answer-icon.png' %}"
@@ -243,14 +247,26 @@
                                     </a>
                                 </td>
                                 <!-- Estado -->
-                                <td>{{ c.status }}</td>
+                                <td>
+                                    {% if c.status == 'opened' %}Abierta
+                                    {% elif c.status == 'closed' %}Cerrada
+                                    {% else %}Publicada
+                                    {% endif %}
+                                </td>
                                 <!-- Ícono de acción (responder) -->
                                 <td class="td-icon">
-                                    {% if c.status == 'Cerrada' %}
+                                    {% if c.status == 'closed' %}
                                         <a href="#" title="Publicar resultados">
                                             <img class="clickable-icon publish-icon wiggle"
                                                  src="{% static 'coevaluador/icon/publish-icon.png' %}"
                                                  alt="Publicar resultados" width="28"
+                                                 height="28">
+                                        </a>
+                                    {% elif c.status == 'published' %}
+                                        <a href="#" title="Exportar resultados">
+                                            <img class="clickable-icon export-icon"
+                                                 src="{% static 'coevaluador/icon/export-icon.png' %}"
+                                                 alt="Exportar resultados" width="28"
                                                  height="28">
                                         </a>
                                     {% endif %}

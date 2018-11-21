@@ -70,8 +70,8 @@
                     <tbody>
                     {% for c in coevaluations %}
                         {% for s in c_sheets %}
-                            {% if s.coevaluation == c %}
-                                <tr {% if s.status == 'Pendiente' %}
+                            {% if s.0 == c %}
+                                <tr {% if s.1 == 'not_answered' %}
                                     class="tr-pendiente"
                                 {% endif %}> <!-- Fila destacada como Pendiente -->
                                     <!-- Fecha de inicio -->
@@ -87,10 +87,14 @@
                                         {{ c.e_date|time:"H:i" }}
                                     </td>
                                     <!-- Estado -->
-                                    <td>{{ s.status }}</td>
+                                    <td>
+                                        {% if s.1 == 'answered' %}Contestada
+                                        {% else %}Pendiente
+                                        {% endif %}
+                                    </td>
                                     <!-- Ícono de acción (responder) -->
                                     <td class="td-icon">
-                                        {% if s.status == 'Pendiente' %}
+                                        {% if s.1 == 'not_answered' %}
                                             <a href="#" title="Responder coevaluación">
                                                 <img class="clickable-icon answer-icon wiggle"
                                                      src="{% static 'coevaluador/icon/answer-icon.png' %}"

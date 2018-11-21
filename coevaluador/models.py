@@ -123,9 +123,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Question(models.Model):
     question = models.CharField(max_length=500)
-    type_choices = (('rango', 'Rango'),
-                    ('textbox', 'Cuadro de Texto'),
-                    )
+    type_choices = (
+        ('rango', 'Rango'),
+        ('textbox', 'Cuadro de Texto'),
+    )
 
     type = models.CharField(max_length=100, choices=type_choices, default='rango')
 
@@ -172,7 +173,11 @@ class TeamRecordForStudent(models.Model):
 
 
 class Coevaluation(models.Model):
-    status_choices= (('opened', 'Abierta'), ('closed','Cerrada'), ('published','Publica'))
+    status_choices = (
+        ('opened', 'Abierta'),
+        ('closed', 'Cerrada'),
+        ('published', 'Publicada')
+    )
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=50, choices=status_choices, default='opened')
     s_date = models.DateTimeField()
@@ -195,14 +200,18 @@ class CourseRecordForStudent(models.Model):
 class CoevaluationSheet(models.Model):
     team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    coevaluator = models.ForeignKey(User,related_name='coevaluator', on_delete=models.CASCADE)
-    coevaluated= models.ForeignKey(User, related_name='coevaluated', on_delete=models.CASCADE)
-    status_choices= (('answered','Contestada'), ('not_answered', 'Pendiente'))
+    coevaluator = models.ForeignKey(User, related_name='coevaluator', on_delete=models.CASCADE)
+    coevaluated = models.ForeignKey(User, related_name='coevaluated', on_delete=models.CASCADE)
+    status_choices = (
+        ('answered', 'Contestada'),
+        ('not_answered', 'Pendiente')
+    )
     status = models.CharField(max_length=100, choices=status_choices, default='not_answered')
-    grade= models.CharField(max_length=10, blank=True)
+    grade = models.CharField(max_length=10, blank=True)
 
     def __str__(self):
-        return '%s / %s / %s / %s' % (self.coevaluation, self.coevaluator, self.coevaluated,  self.status)
+        return '%s / %s / %s / %s' % (self.coevaluation, self.coevaluator, self.coevaluated, self.status)
+
 
 # class Response(models.Model):
 #     evaluator= models.ForeignKey(User, )
@@ -212,7 +221,6 @@ class Answer(models.Model):
     coevaluation_sheet = models.ForeignKey(CoevaluationSheet, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     ans = models.CharField(max_length=1000)
-
 
 
 class Admin(models.Model):

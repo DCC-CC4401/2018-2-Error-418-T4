@@ -57,13 +57,22 @@ def home(request):
         te = user.courses_as_teacher.all()
         courses = st.union(au, ai, te)
         cst = Coevaluation.objects.filter(course__in=st)
-        c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=cst, coevaluator=user)
+        c_set = []
+        for c in cst.order_by('e_date').reverse():
+            c_sheets = CoevaluationSheet.objects.filter(coevaluation=c, coevaluator=user)
+            if c_sheets.exists():
+                status = 'answered'
+                for cs in c_sheets.all():
+                    if cs.status == 'not_answered':
+                        status = 'not_answered'
+                c_set.append([c, status])
+
         cau = Coevaluation.objects.filter(course__in=au)
         cai = Coevaluation.objects.filter(course__in=ai)
         cte = Coevaluation.objects.filter(course__in=te)
         coevaluations = cst.union(cau, cai, cte)
         context = {
-            'c_sheets': c_sheets.all(),
+            'c_sheets': c_set,
             'coevaluations': coevaluations.order_by('e_date').reverse(),
             'courses': courses.order_by('name'),
             'courses_as_student': user.courses_as_student.all(),
@@ -127,8 +136,8 @@ def coevaluation(request, coev_id, st_id=-1):
                    "current_st": current_st,
                    "user": user,
                    "coevsheet": coevaluationsheet,
-                  # "aviable": aviable
-        }
+                   # "aviable": aviable
+                   }
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)
     else:
@@ -153,7 +162,7 @@ def add_co_evaluation(request):
                                             section=course_section)
             s_date = request.POST['co_s_date']
             e_date = request.POST['co_e_date']
-            co_evaluation = Coevaluation(name=co_title, status="Abierta", s_date=s_date, e_date=e_date,
+            co_evaluation = Coevaluation(name=co_title, s_date=s_date, e_date=e_date,
                                          course=course_obj)
             co_evaluation.save()
             return HttpResponseRedirect(reverse('coevaluador:course',
@@ -175,9 +184,17 @@ def course(request, year, semester, code, section):
 
             if course_obj in user.courses_as_student.all():
                 co_ev = Coevaluation.objects.filter(course=course_obj)
-                c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=co_ev, student=user)
+                c_set = []
+                for c in co_ev.order_by('e_date').reverse():
+                    c_sheets = CoevaluationSheet.objects.filter(coevaluation=c, coevaluator=user)
+                    if c_sheets.exists():
+                        status = 'answered'
+                        for cs in c_sheets.all():
+                            if cs.status == 'not_answered':
+                                status = 'not_answered'
+                        c_set.append([c, status])
                 context['coevaluations'] = co_ev.order_by('e_date').reverse()
-                context['c_sheets'] = c_sheets.all()
+                context['c_sheets'] = c_set
                 return render(request, 'coevaluador/studentCourse.html', context)
             else:
                 coevaluations = Coevaluation.objects.filter(course=course_obj)
@@ -187,7 +204,7 @@ def course(request, year, semester, code, section):
                 work_teams = course_obj.workteam_set.all()
                 wts = []
                 for wt in work_teams:
-                    members = wt.teammember_set.all()
+                    members = wt.wt_members.all()
                     wt_mem = []
                     for m in members:
                         wt_mem.append(m)
