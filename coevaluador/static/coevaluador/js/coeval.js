@@ -1,5 +1,5 @@
 function jumpTo(anchor) {
-	document.getElementById(anchor).scrollIntoView();
+    document.getElementById(anchor).scrollIntoView();
 }
 
 /* Home page */
@@ -52,6 +52,13 @@ function cancelPass() {
 }
 
 /* Gestión Curso */
+
+function seeCourse(year, semester, code, section) {
+    let url = "http://127.0.0.1:8000/course/";
+    let s = "/";
+    url = url.concat(year, s, semester, s, code, s, section);
+    window.location.href =(url);
+}
 
 function showGestionEstudiante() {
     document.getElementById("gestion-grupo").style.display = "none";

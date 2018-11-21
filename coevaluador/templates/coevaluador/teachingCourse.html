@@ -30,11 +30,11 @@
             </form>
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Juanito Pérez</a>
+                <a class="nav-link" href="#">{{ user.get_full_name }}</a>
             </li>
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Cerrar Sesión</a>
+                <a class="nav-link" href="{% url 'coevaluador:logout' %}">Cerrar Sesión</a>
             </li>
         </ul>
     </div>
@@ -46,8 +46,12 @@
 
     <h3 class="d-inline-block page-title">Ficha de Curso</h3>
     <h5 class="mb-3">
-        <div class="cargos cargos-profesor"></div>
-        CC4401-1 Ingeniería de Software 2018, Primavera
+        <div class="cargos cargos-{% if course in user.course_as_student %}alumno
+                                        {% elif course in user.courses_as_teacher %}profesor
+                                        {% elif course in user.courses_as_aide %}ayudante
+                                        {% else %}auxiliar
+                                        {% endif %}"></div>
+        {{ course.code }}-{{ course.section }} {{ course.name }} {{ course.year }}, {{ sem_str }}
     </h5>
     <hr/>
     <!-- Tablas de resumen -->
@@ -73,59 +77,54 @@
 
                     <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
-                    <tr>
-                        <!-- Fecha de inicio -->
-                        <td class="td-fecha">
-                            20:01 01/12/18
-                        </td>
-                        <!-- Título de coevaluación -->
-                        <td>Tarea final</td>
-                        <!-- Fecha de término -->
-                        <td class="td-fecha">
-                            23:59 20/12/18
-                        </td>
-                        <!-- Estado -->
-                        <td>Abierta</td>
-                        <!-- Ícono de acción (responder) -->
-                        <td class="td-icon"></td>
-                    </tr>
-                    <tr>
-                        <td class="td-fecha">
-                            12:03 11/11/18
-                        </td>
-                        <td>Tarea con nombre muy largo que ocupa todo el espacio</td>
-                        <td class="td-fecha">
-                            23:59 21/11/18
-                        </td>
-                        <td>Abierta</td>
-                        <td class="td-icon"></td>
-                    </tr>
-                    <tr>
-                        <td class="td-fecha">15:15 10/11/18</td>
-                        <td>Tarea 2</td>
-                        <td class="td-fecha">23:59 19/11/18</td>
-                        <td>Cerrada</td>
-                        <td class="td-icon">
-                            <a href="#" title="Publicar resultados">
-                                <img class="clickable-icon publish-icon wiggle"
-                                     src="{% static 'coevaluador/icon/publish-icon.png' %}"
-                                     alt="Publicar resultados" width="28"
-                                     height="28"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="td-fecha">03:53 20/10/18</td>
-                        <td>Tarea 1</td>
-                        <td class="td-fecha">23:59 27/10/18</td>
-                        <td>Publicada</td>
-                        <td class="td-icon">
-                            <a href="#" title="Exportar resultados">
-                                <img class="clickable-icon export-icon"
-                                     src="{% static 'coevaluador/icon/export-icon.png' %}"
-                                     alt="Exportar resultados" width="28"
-                                     height="28"></a>
-                        </td>
-                    </tr>
+                    {% for c in coevaluations %}
+                        <tr>
+                            <!-- Fecha de inicio -->
+                            <td class="td-fecha">
+                                {{ c.s_date|date:"d/m/y" }}
+                                {{ c.s_date|time:"H:i" }}
+                                <!-- Ícono de lápiz -->
+                                <a href="#" title="Editar fecha de inicio">
+                                    <img class="clickable-icon mb-1"
+                                         src="{% static 'coevaluador/icon/edit-icon.png' %}" alt="editar fecha"
+                                         width="13" height="13">
+                                </a>
+                            </td>
+                            <!-- Título de coevaluación -->
+                            <td>{{ c.name }}</td>
+                            <!-- Fecha de término -->
+                            <td class="td-fecha">
+                                {{ c.e_date|date:"d/m/y" }}
+                                {{ c.e_date|time:"H:i" }}
+                                <!-- Ícono de lápiz -->
+                                <a href="#" title="Editar fecha de término">
+                                    <img class="clickable-icon mb-1"
+                                         src="{% static 'coevaluador/icon/edit-icon.png' %}" alt="editar fecha"
+                                         width="13" height="13">
+                                </a>
+                            </td>
+                            <!-- Estado -->
+                            <td>{{ c.status }}</td>
+                            <!-- Ícono de acción (responder) -->
+                            <td class="td-icon">
+                                {% if c.status == 'Cerrada' %}
+                                    <a href="#" title="Publicar resultados">
+                                        <img class="clickable-icon publish-icon wiggle"
+                                             src="{% static 'coevaluador/icon/publish-icon.png' %}"
+                                             alt="Publicar resultados" width="28"
+                                             height="28">
+                                    </a>
+                                {% elif c.status == 'Publicada' %}
+                                    <a href="#" title="Exportar resultados">
+                                        <img class="clickable-icon export-icon"
+                                             src="{% static 'coevaluador/icon/export-icon.png' %}"
+                                             alt="Exportar resultados" width="28"
+                                             height="28">
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

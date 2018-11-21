@@ -8,8 +8,10 @@ from django.urls import reverse
 from .forms import LoginForm
 from .models import *
 
-
 # Use underscore separated words for views like hello_world.
+
+SEMESTER = ['Verano', 'Otoño', 'Primavera']
+
 
 def login(request):
     # if this is a POST request we need to process the form data
@@ -34,6 +36,8 @@ def login(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
+        if request.user.is_authenticated:
+            return home(request)
         form = LoginForm()
 
     return render(request, 'coevaluador/login.html', {'form': form})
@@ -134,6 +138,36 @@ def coevaluation(request, coev_id, st_id=-1):
 
 def teaching_coevaluation(request):
     return render(request, 'coevaluador/teachingCoevaluation.html')
+
+
+def course(request, year, semester, code, section):
+    user = request.user
+    if user.is_authenticated:
+        try:
+
+            course_obj = Course.objects.get(year=year, semester=semester, code=code, section=section)
+
+            print(year, semester, code, section)
+
+            context = {
+                'course': course_obj,
+                'sem_str': SEMESTER[semester]
+            }
+
+            if course_obj in user.courses_as_student.all():
+                co_ev = Coevaluation.objects.filter(course=course_obj)
+                c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=co_ev, student=user)
+                context['coevaluations'] = co_ev.order_by('e_date').reverse()
+                context['c_sheets'] = c_sheets.all()
+                return render(request, 'coevaluador/studentCourse.html', context)
+            else:
+                coevaluations = Coevaluation.objects.filter(course=course_obj)
+                context['coevaluations'] = coevaluations.order_by('e_date').reverse()
+                return render(request, 'coevaluador/teachingCourse.html', context)
+
+        except Course.DoesNotExist:
+            HttpResponseRedirect(reverse('coevaluador:login'))
+    return HttpResponseRedirect(reverse('coevaluador:login'))
 
 
 def student_course(request):
