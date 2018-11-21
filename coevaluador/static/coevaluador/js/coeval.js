@@ -35,9 +35,9 @@ function changePass() {
     document.getElementById("row-btn").classList.remove("active");
 }
 
-function showNotas() {
+function showNotas(code) {
     document.getElementById("cambiar-contrasena").style.display = "none";
-    document.getElementById("notas-resumen").style.display = "block";
+    document.getElementById("notas-resumen-"+code).style.display = "block";
     document.getElementById("notas-placeholder").style.display = "none";
     document.getElementById("row-btn").classList.add("active");
     var changePass = document.getElementById("change-pass-btn");

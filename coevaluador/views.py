@@ -98,6 +98,7 @@ def teaching_course(request):
     return render(request, 'coevaluador/teachingCourse.html')
 
 
+
 def owner_profile(request):
     if request.user.is_authenticated:
         user = request.user

@@ -77,7 +77,7 @@
                     <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
                     {% for course in courses %}
-                        <tr id="row-btn" onclick="showNotas()">
+                        <tr id="row-btn" onclick="showNotas({{ course.code }})">
                             <td class="td-curso-full">
                                 <div class="cargos cargos-alumno tooltip-custom">
                                     <span class="tooltiptext"></span>
@@ -119,50 +119,47 @@
             <div id="notas-placeholder" class="mt-5">
                 <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas</h5>
             </div>
-            <div id="notas-resumen">
-                <h4 class="d-inline-block mt-1">Tus Notas</h4>
-                <h5 class="float-right mb-0 mt-2 text-muted" id="currentCurso">CC5402-1, 2018-2</h5>
+            {% for course in courses %}
+                <div id="notas-resumen-{{course.code}}">
+                    <h4 class="d-inline-block mt-1">Tus Notas</h4>
+                    <h5 class="float-right mb-0 mt-2 text-muted" id="currentCurso">{{ course.name }}</h5>
 
-                <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
-                    <table class="table table-notas-perfil table-striped table-hover mb-0"> <!-- Tabla -->
-                        <!-- Encabezados de tabla (Table Headers) -->
-                        <thead class="thead-light">
-                        <tr> <!-- Fila (Table Row) -->
-                            <th class="th-fecha">Publicada</th>
-                            <th class="th-titulo">Título</th>
-                            <th class="th-nota">Nota</th>
-                        </tr>
-                        </thead>
+                    <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
+                        <table class="table table-notas-perfil table-striped table-hover mb-0"> <!-- Tabla -->
+                            <!-- Encabezados de tabla (Table Headers) -->
+                            <thead class="thead-light">
+                            <tr> <!-- Fila (Table Row) -->
+                                <th class="th-fecha">Publicada</th>
+                                <th class="th-titulo">Título</th>
+                                <th class="th-nota">Nota</th>
+                            </tr>
+                            </thead>
 
-                        <!-- Cuerpo de tabla (Table Data) -->
-                        <tbody>
-                        <tr>
-                            <!-- Fecha de publicación -->
-                            <td class="td-fecha">23:59 22/11/17</td>
-                            <!-- Título de coevaluación -->
-                            <td>Tarea 4</td>
-                            <!-- Nota -->
-                            <td class="td-nota">6.2</td>
-                        </tr>
-                        <tr>
-                            <td class="td-fecha">23:59 13/10/17</td>
-                            <td>Tarea 3</td>
-                            <td class="td-nota td-nota-roja">3.8</td>
-                        </tr>
-                        <tr>
-                            <td class="td-fecha">23:59 17/09/17</td>
-                            <td>Tarea 2</td>
-                            <td class="td-nota">5.7</td>
-                        </tr>
-                        <tr>
-                            <td class="td-fecha">12:15 20/08/17</td>
-                            <td>Tarea 1</td>
-                            <td class="td-nota">6.5</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            <!-- Cuerpo de tabla (Table Data) -->
+                            <tbody>
+                            {% for coev_sheet in student_coevaluation_sheets %}
+                                {% if coev_sheet.coevaluation.course.code == course.code and coev_sheet.coevaluation.status == "Publicada" %}
+
+                                    <tr>
+                                        <!-- Fecha de publicación -->
+                                        <td class="td-fecha">{{ coev_sheet.coevaluation.e_date }}</td>
+                                        <!-- Título de coevaluación -->
+                                        <td>{{ coev_sheet.coevaluation.name }}</td>
+                                        <!-- Nota -->
+                                        <!-- % if grade < 4.0 %} -->
+                                            <td class="td-nota td-nota-roja">3.8</td>
+                                        <!-- % elseif grade >= 4.0 %} --
+                                            <td class="td-nota">6.2</td>
+                                        % endif %} -->
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
