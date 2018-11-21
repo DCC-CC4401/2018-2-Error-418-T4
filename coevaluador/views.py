@@ -92,14 +92,33 @@ def teaching_coevaluation(request):
     return render(request, 'coevaluador/teachingCoevaluation.html')
 
 
+def add_co_evaluation(request):
+    if request.method == 'POST':
+        user = request.user
+        if user.is_authenticated:
+            co_title = request.POST['co_title']
+            course_year = request.POST['course_year']
+            course_semester = request.POST['course_semester']
+            course_name = request.POST['course_name']
+            course_section = request.POST['course_section']
+            course_obj = Course.objects.get(year=course_year, semester=course_semester, name=course_name,
+                                            section=course_section)
+            s_date = request.POST['co_s_date']
+            e_date = request.POST['co_e_date']
+            co_evaluation = Coevaluation(name=co_title, status="Abierta", s_date=s_date, e_date=e_date,
+                                         course=course_obj)
+            co_evaluation.save()
+            return HttpResponseRedirect(reverse('coevaluador:course',
+                                                args=(course_obj.year, course_obj.semester, course_obj.code,
+                                                      course_obj.section)))
+
+
 def course(request, year, semester, code, section):
     user = request.user
     if user.is_authenticated:
         try:
 
             course_obj = Course.objects.get(year=year, semester=semester, code=code, section=section)
-
-            print(year, semester, code, section)
 
             context = {
                 'course': course_obj,
@@ -114,7 +133,19 @@ def course(request, year, semester, code, section):
                 return render(request, 'coevaluador/studentCourse.html', context)
             else:
                 coevaluations = Coevaluation.objects.filter(course=course_obj)
+                published_coevaluations = coevaluations.filter(status='Publicada')
                 context['coevaluations'] = coevaluations.order_by('e_date').reverse()
+                context['published_co_evs'] = published_coevaluations.order_by('s_date')
+                work_teams = course_obj.workteam_set.all()
+                wts = []
+                for wt in work_teams:
+                    members = wt.teammember_set.all()
+                    wt_mem = []
+                    for m in members:
+                        wt_mem.append(m)
+                    wt_arr = [wt, wt_mem]
+                    wts.append(wt_arr)
+                context['work_teams'] = wts
                 return render(request, 'coevaluador/teachingCourse.html', context)
 
         except Course.DoesNotExist:

@@ -25,6 +25,11 @@
     <!-- Menú superior-derecha -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
+            {% if courses_as_teacher or courses_as_auxiliary or courses_as_aide %}
+                <form class="nav-link form-inline my-2 my-lg-0">
+                    <input class="form-control" type="search" placeholder="Buscar alumno..." aria-label="Buscar alumno">
+                </form>
+            {% endif %}
             <li class="divider-vertical"></li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'coevaluador:ownerProfile' %}">{{ user.get_full_name }}</a>
