@@ -166,7 +166,7 @@ body {
 
 .table td, .table th {
     padding: 0.4375rem;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
 }
 
@@ -715,5 +715,9 @@ button:active > .clickable-icon {
 
 .width-auto {
     width: auto;
+}
+
+.notas-resumen {
+    display: none;
 }
 

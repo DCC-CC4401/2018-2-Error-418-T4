@@ -77,9 +77,13 @@
                     <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
                     {% for course in courses %}
-                        <tr id="row-btn" onclick="showNotas({{ course.code }})">
+                        <tr id="row-btn" onclick="showNotas('{{course.code}}')">
                             <td class="td-curso-full">
-                                <div class="cargos cargos-alumno tooltip-custom">
+                                <div class="cargos cargos-{% if course in courses_as_student %}alumno
+                                    {% elif course in courses_as_teacher %}profesor
+                                    {% elif course in courses_as_aide %}ayudante
+                                    {% else %}auxiliar
+                                    {% endif %} tooltip-custom">
                                     <span class="tooltiptext"></span>
                                 </div>
                                 <span class="curso-nombre">{{ course.name }}</span>
@@ -99,7 +103,7 @@
         <div class="col-md-5">
             <div id="cambiar-contrasena">
                 <h4 class="d-inline-block mt-1">Cambiar contraseña</h4>
-                <form>
+                <form action="#" method="post">
                     <div class="form-group">
                         <label for="passOld">Ingrese su contraseña actual</label>
                         <input type="password" class="form-control" id="passOld">
@@ -120,9 +124,9 @@
                 <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas</h5>
             </div>
             {% for course in courses %}
-                <div id="notas-resumen-{{course.code}}">
+                <div class="notas-resumen" id="notas-resumen-{{course.code}}">
                     <h4 class="d-inline-block mt-1">Tus Notas</h4>
-                    <h5 class="float-right mb-0 mt-2 text-muted" id="currentCurso">{{ course.name }}</h5>
+                    <h5 class="float-right mb-0 mt-2 text-muted" id="currentCurso">{{ course.code }}-{{ course.section }}, {{ course.year }}-{{ course.semester }}</h5>
 
                     <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
                         <table class="table table-notas-perfil table-striped table-hover mb-0"> <!-- Tabla -->
@@ -142,7 +146,8 @@
 
                                     <tr>
                                         <!-- Fecha de publicación -->
-                                        <td class="td-fecha">{{ coev_sheet.coevaluation.e_date }}</td>
+                                        <td class="td-fecha">{{ coev_sheet.coevaluation.e_date|date:"d/m/y" }}
+                                                {{ coev_sheet.coevaluation.e_date|time:"H:i" }}</td>
                                         <!-- Título de coevaluación -->
                                         <td>{{ coev_sheet.coevaluation.name }}</td>
                                         <!-- Nota -->

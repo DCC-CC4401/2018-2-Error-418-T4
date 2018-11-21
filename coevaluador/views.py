@@ -115,6 +115,10 @@ def owner_profile(request):
         context = {
             "student": user,
             "courses": courses,
+            'courses_as_student': user.courses_as_student.all(),
+            'courses_as_auxiliary': user.courses_as_auxiliary.all(),
+            'courses_as_aide': user.courses_as_aide.all(),
+            'courses_as_teacher': user.courses_as_teacher.all(),
             "student_coevaluations": student_coev,
             "student_coevaluation_sheets": student_coev_sheets
         }
