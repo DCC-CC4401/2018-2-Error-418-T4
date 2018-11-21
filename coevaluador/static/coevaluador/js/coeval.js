@@ -49,7 +49,12 @@ function showNotas(code) {
     }
     document.getElementById("notas-resumen-"+code).style.display = "block";
     document.getElementById("notas-placeholder").style.display = "none";
-    document.getElementById("row-btn").classList.add("active");
+    let active = document.getElementsByClassName("disp");
+    let s = active.length;
+    for (let i = 0; i < s; i++) {
+        active[i].classList.remove("active");
+    }
+    document.getElementById("row-btn-"+code).classList.add("active");
     var changePass = document.getElementById("change-pass-btn");
     if (changePass !== null) changePass.classList.remove("active");
 }
