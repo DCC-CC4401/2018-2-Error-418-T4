@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as lgi, logout as lgo
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -56,7 +57,7 @@ def home(request):
         te = user.courses_as_teacher.all()
         courses = st.union(au, ai, te)
         cst = Coevaluation.objects.filter(course__in=st)
-        c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=cst, student=user)
+        c_sheets = CoevaluationSheet.objects.filter(coevaluation__in=cst, coevaluator=user)
         cau = Coevaluation.objects.filter(course__in=au)
         cai = Coevaluation.objects.filter(course__in=ai)
         cte = Coevaluation.objects.filter(course__in=te)
@@ -84,8 +85,55 @@ def teaching_home(request):
     return render(request, 'coevaluador/teachingHome.html')
 
 
-def student_coevaluation(request):
-    return render(request, 'coevaluador/studentCoevaluation.html')
+@login_required(login_url='/login')
+def coevaluation(request, coev_id, st_id=-1):
+    user = request.user
+    st_id = user.pk if st_id == -1 else st_id
+    coevaluationsheet = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+                                                         coevaluated_id=st_id).first()
+    coevaluation = Coevaluation.objects.get(id=coev_id)
+    questions = coevaluation.question.all()
+
+    if request.method == 'POST':
+        for q in questions:
+            ans = request.POST[str(q.id)]
+            answer = Answer(coevaluation_sheet=coevaluationsheet, question=q, ans=ans)
+            answer.save()
+        coevaluationsheet.status = 'answered'
+        coevaluationsheet.save()
+    if coev_id:
+        team = WorkTeam.objects.filter(course=coevaluation.course, wt_members__student=user).first()
+        members = TeamMember.objects.filter(work_team=team)
+        aviable = {}
+        # for member in members:
+        #     if member.student != user:
+        #         cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+        #                                               coevaluated_id=int(member.student.pk)).first()
+        #         print(member, user)
+        #         print(member.student.pk)
+        #         aviable[member.student.pk] = cs.status
+        # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
+        # Como dict[a.id]
+        current_st = -1
+        if int(st_id) >= 0:
+            a = members.filter(student_id=st_id).first().student
+            if not a.get_full_name() == user.get_full_name():
+                current_st = a
+
+        context = {'coev': coevaluation,
+                   "group": members,
+                   "team": team,
+                   "questions": questions,
+                   "current_st": current_st,
+                   "user": user,
+                   "coevsheet": coevaluationsheet,
+                  # "aviable": aviable
+        }
+
+        return render(request, 'coevaluador/studentCoevaluation.html', context)
+    else:
+        form = LoginForm()
+        return render(request, 'coevaluador/login.html', {'form': form})
 
 
 def teaching_coevaluation(request):
