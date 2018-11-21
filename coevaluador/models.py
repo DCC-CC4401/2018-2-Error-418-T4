@@ -158,7 +158,7 @@ class WorkTeam(models.Model):
 
 
 class TeamMember(models.Model):
-    work_team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
+    work_team = models.ForeignKey(WorkTeam, related_name='wt_members', on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -195,11 +195,14 @@ class CourseRecordForStudent(models.Model):
 class CoevaluationSheet(models.Model):
     team = models.ForeignKey(WorkTeam, on_delete=models.CASCADE)
     coevaluation = models.ForeignKey(Coevaluation, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100)
+    coevaluator = models.ForeignKey(User,related_name='coevaluator', on_delete=models.CASCADE)
+    coevaluated= models.ForeignKey(User, related_name='coevaluated', on_delete=models.CASCADE)
+    status_choices= (('answered','Contestada'), ('not_answered', 'No Contestada'))
+    status = models.CharField(max_length=100, choices=status_choices, default='not_answered')
+    grade= models.CharField(max_length=10, blank=True)
 
     def __str__(self):
-        return '%s / %s / %s' % (self.coevaluation, self.student, self.status)
+        return '%s / %s / %s / %s' % (self.coevaluation, self.coevaluator, self.coevaluated,  self.status)
 
 # class Response(models.Model):
 #     evaluator= models.ForeignKey(User, )
@@ -207,10 +210,9 @@ class CoevaluationSheet(models.Model):
 
 class Answer(models.Model):
     coevaluation_sheet = models.ForeignKey(CoevaluationSheet, on_delete=models.CASCADE)
-    evaluator = models.ForeignKey(User, related_name='evaluator', on_delete=models.CASCADE)
-    evaluated = models.ForeignKey(User, related_name='evaluated', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer = models.CharField(max_length=1000)
+    ans = models.CharField(max_length=1000)
+
 
 
 class Admin(models.Model):
