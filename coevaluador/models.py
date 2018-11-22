@@ -177,9 +177,9 @@ class TeamRecordForStudent(models.Model):
 
 
 class Coevaluation(models.Model):
-    status_choices= (('Abierta', 'Abierta'), ('Cerrada','Cerrada'), ('Publicada', 'Publicada'))
+    status_choices= (('opened', 'Abierta'), ('closed','Cerrada'), ('published', 'Publicada'))
     name = models.CharField(max_length=100)
-    status = models.CharField(max_length=50, choices=status_choices, default='Abierta')
+    status = models.CharField(max_length=50, choices=status_choices, default='opened')
     s_date = models.DateTimeField()
     e_date = models.DateTimeField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
