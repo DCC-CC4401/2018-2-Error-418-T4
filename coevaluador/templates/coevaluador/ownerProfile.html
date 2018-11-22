@@ -55,9 +55,9 @@
             <span>{{ student.rut }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Correo Electrónico</h6>
             <span>{{ student.email }}</span>
-            <button type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block" onclick="changePass()">
-                Cambiar contraseña
-            </button>
+            <input type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block" onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"
+                   value="Cambiar contraseña">
+            </input>
         </div>
         <!-- FIN Perfil -->
 
@@ -103,18 +103,19 @@
         <div class="col-md-5">
             <div id="cambiar-contrasena">
                 <h4 class="d-inline-block mt-1">Cambiar contraseña</h4>
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="passOld">Ingrese su contraseña actual</label>
-                        <input type="password" class="form-control" id="passOld">
+                <form action="/save/data/" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <p>{{form.old_password}}</p>
+                        <span>{{form.old_password.errors}}</span>
                     </div>
-                    <div class="form-group">
-                        <label for="passNew">Ingrese su nueva contraseña</label>
-                        <input type="password" class="form-control" id="passNew">
+                    <div>
+                        <p>{{form.new_password}}</p>
+                        <span>{{form.new_password.errors}}</span>
                     </div>
-                    <div class="form-group">
-                        <label for="passNewConfirm">Confirme su nueva contraseña</label>
-                        <input type="password" class="form-control" id="passNewConfirm">
+                    <div>
+                        <p>{{form.confirm_password}}</p>
+                        <span>{{form.confirm_password.errors}}</span>
                     </div>
                     <button type="submit" class="btn btn-primary-custom">Confirmar</button>
                     <button type="button" class="btn btn-cancel" onclick="cancelPass()">Cancelar</button>

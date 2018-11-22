@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as lgi, logout as lgo
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth import update_session_auth_hash
 
 from coevaluador.models import Coevaluation, CoevaluationSheet
 from .models import Course
-from .forms import LoginForm
+from .forms import *
 from .models import *
 
 # Use underscore separated words for views like hello_world.
@@ -248,6 +250,21 @@ def owner_profile(request):
         }
         return render(request, 'coevaluador/ownerProfile.html', context)
 
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('coevaluador:ownerProfile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'coevaluador/changePassword.html', {
+        'form': form
+    })
 
 
 def teaching_profile(request):
