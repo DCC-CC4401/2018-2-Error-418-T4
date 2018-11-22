@@ -182,11 +182,14 @@ def add_co_evaluation(request):
             co_evaluation = Coevaluation(name=co_title, s_date=s_date, e_date=e_date,
                                          course=course_obj)
             for q in questions_id:
-                co_evaluation.question.set(Coevaluation.objects.get(id=q))
+                co_evaluation.question.add(Question.objects.get(id=q))
             co_evaluation.save()
-            return HttpResponseRedirect(reverse('coevaluador:course',
-                                                args=(course_obj.year, course_obj.semester, course_obj.code,
-                                                      course_obj.section)))
+            if 'co_course' not in request.POST:
+                return HttpResponseRedirect(reverse('coevaluador:course',
+                                                    args=(course_obj.year, course_obj.semester, course_obj.code,
+                                                          course_obj.section)))
+            else:
+                return HttpResponseRedirect(reverse('coevaluador:home'))
 
 
 def course(request, year, semester, code, section):
