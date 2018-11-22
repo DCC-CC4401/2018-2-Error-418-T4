@@ -13,6 +13,7 @@ urlpatterns = [
     path('teaching-home', views.teaching_home, name='teachingHome'),
     path('coevaluation/<int:coev_id>/<str:st_id>/', views.coevaluation, name='coevaluation'),
     path('coevaluation/<int:coev_id>/', views.coevaluation, name='coevaluation'),
+    path('teaching-coevaluation/<int:coev_id>/', views.teaching_coevaluation, name='teachingcoevaluation'),
     path('student-course', views.student_course, name='studentCourse'),
     path('teaching-course', views.teaching_course, name='teachingCourse'),
     path('owner-profile', views.owner_profile, name='ownerProfile'),
