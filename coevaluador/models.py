@@ -145,6 +145,11 @@ class Course(models.Model):
     teachers = models.ManyToManyField(User, related_name='courses_as_teacher')
     questions = models.ManyToManyField(Question, blank=True)
 
+    class Meta:
+        unique_together=(("name", "code", "section", "year", "semester"))
+
+
+
     def __str__(self):
         return '%s-%d %s' % (self.code, self.section, self.name)
 
