@@ -140,7 +140,8 @@ def coevaluation(request, coev_id, st_id=-1):
                    "current_st": current_st,
                    "user": user,
                    "coevsheet": coevaluationsheet,
-                   "aviable": aviable
+                   "aviable": aviable,
+                   "range": range(1, 8)
                    }
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)

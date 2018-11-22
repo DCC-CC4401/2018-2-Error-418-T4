@@ -64,7 +64,10 @@
                 </div>
             </div>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Estado</h6>
-            <span>{{ coev.status }}</span>
+            <span>{% if coev.status == 'opened' %}Abierta
+            {% elif coev.status == 'closed' %}Cerrada
+            {% else %}Publicada
+            {% endif %}</span>
         </div>
         <!-- FIN Información -->
 
@@ -84,25 +87,23 @@
 
 
                     {% for a in group %}
+
                         {% with a.student.pk as id %}
 
-                            {% if a.student.get_full_name == user.get_full_name or coev.status == 'Cerrada' or aviable|getkey:id == 'answered' %}
+                            {% if a.student.get_full_name == user.get_full_name or coev.status != 'opened'  or aviable|getkey:id == 'answered' %}
                                 <tr>
                                     <td>{{ a.student.get_full_name }}</td>
                                     <td class="td-icon"></td>
                                 </tr>
 
                             {% else %}
-                                <tr class="tr-pendiente" onclick="jumpTo('coevaluador:coevaluation')">
+                                <tr class="tr-pendiente" onclick="seeCoEv2({{ coev.id }},{{ a.student.pk }})">
                                     <td>{{ a.student.get_full_name }}</td>
                                     <td class="td-icon">
-                                        <a href={% url 'coevaluador:coevaluation' coev.id a.student.pk %}
-                                                   title="Responder_coevaluación">
+                                        <a href={% url 'coevaluador:coevaluation' coev.id a.student.pk %} title="Responder_coevaluación">
                                             <img class="clickable-icon answer-icon wiggle"
                                                  src="{% static 'coevaluador/icon/answer-icon.png' %}"
-                                                 alt="Responder coevaluación" width="28" height="28">
-                                        </a>
-                                    </td>
+                                                 alt="Responder coevaluación" width="28" height="28"> </a></td>
                                 </tr>
                             {% endif %}
                         {% endwith %}
@@ -117,11 +118,9 @@
     </div>
     {% if coev.status == 'opened' %}
         <h4 class="d-inline-block mt-1 mb-0">Responder coevaluación</h4>
-
         <hr/>
-
         <!-- Detalle de coevaluación contestada -->
-        {% if current_st != -1 and coev.status == 'Abierta' and coevsheet.status == 'not_answered' %}
+        {% if current_st != -1 and coev.status == 'opened' and coevsheet.status == 'not_answered' %}
             <div id="responder-coeval" class="row">
                 <div class="col-10 offset-1">
                     <h5 class="font-italic d-inline-block">Estas respondiendo para:</h5>
@@ -137,56 +136,19 @@
 
                                     <div class="criterio-coeval">
                                         {% if q.type == 'rango' %}
+                                            {% for i in range %}
 
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio1"
-                                                       value=1>
-                                                <label class="form-check-label" for="inlineRadio1">1</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio2"
-                                                       value=2>
-                                                <label class="form-check-label" for="inlineRadio2">2</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio3"
-                                                       value=3>
-                                                <label class="form-check-label" for="inlineRadio3">3</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio3"
-                                                       value=4>
-                                                <label class="form-check-label" for="inlineRadio3">4</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio3"
-                                                       value=5>
-                                                <label class="form-check-label" for="inlineRadio3">5</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio3"
-                                                       value=6>
-                                                <label class="form-check-label" for="inlineRadio3">6</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="{{ q.id }}"
-                                                       id="inlineRadio3"
-                                                       value=7>
-                                                <label class="form-check-label" for="inlineRadio3">7</label>
-                                            </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="{{ q.id }}"
+                                                           id="inlineRadio1"
+                                                           value=i
+                                                           required>
+
+                                                    <label class="form-check-label" for="inlineRadio1">{{ i }}</label>
+                                                </div>
+                                            {% endfor %}
+
                                             </div>
                                             </li>
 
@@ -198,13 +160,20 @@
                                         <label for="exampleFormControlTextarea1"></label>
                                         <textarea class="form-control" name="{{ q.id }}"
                                                   id="exampleFormControlTextarea1"
-                                                  rows="3"></textarea>
+                                                  rows="3"
+                                                  required></textarea>
                                     </div>
+
+
                                 {% endif %}
+
                             {% endfor %}
+
+
                         </ol>
                         <button type="submit" class="btn btn-primary-custom">Enviar coevaluación</button>
                     </form>
+
                 </div>
             </div>
 
@@ -212,8 +181,10 @@
             <li class="h5"> Seleccione un compañero/a para coevaluar
             </li>
         {% endif %}
-    {% else %}
+    {% elif coev.status == 'closed' %}
         <li class="h5"> Coevaluacion cerrada</li>
+     {% else %}
+        <li class="h5"> Coevaluacion publicada</li>
     {% endif %}
 </div>
 </body>
