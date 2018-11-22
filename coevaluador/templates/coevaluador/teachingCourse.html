@@ -30,7 +30,7 @@
             </form>
             <li class="divider-vertical"></li>
             <li class="nav-item">
-                <a class="nav-link" href="#">{{ user.get_full_name }}</a>
+                <a class="nav-link" href="{% url 'coevaluador:ownerProfile' %}">{{ user.get_full_name }}</a>
             </li>
             <li class="divider-vertical"></li>
             <li class="nav-item">
@@ -84,6 +84,16 @@
                            required placeholder="dd/mm/yyyy" name="co_e_date">
                 </div>
             </div>
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="questions">Selecciona las preguntas</label>
+                    <select multiple class="form-control" id="questions" name="co_questions" required>
+                        {% for q in questions %}
+                            <option value="{{ q.id }}">{{ q.question }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary-custom">Confirmar</button>
             <button type="button" class="btn btn-cancel" onclick="cancelAdd()">Cancelar</button>
         </form>
@@ -93,11 +103,13 @@
 
     <h3 class="d-inline-block page-title">Ficha de Curso</h3>
     <h5 class="mb-3">
-        <div class="cargos cargos-{% if course in user.course_as_student %}alumno
-                                        {% elif course in user.courses_as_teacher %}profesor
-                                        {% elif course in user.courses_as_aide %}ayudante
+        <div class="cargos cargos-{% if course in user.course_as_student.all %}alumno
+                                        {% elif course in user.courses_as_teacher.all %}profesor
+                                        {% elif course in user.courses_as_aide.all %}ayudante
                                         {% else %}auxiliar
-                                        {% endif %}"></div>
+                                        {% endif %}">
+
+        </div>
         {{ course.code }}-{{ course.section }} {{ course.name }} {{ course.year }}, {{ sem_str }}
     </h5>
     <hr/>
@@ -152,17 +164,22 @@
                                 </a>
                             </td>
                             <!-- Estado -->
-                            <td>{{ c.status }}</td>
+                            <td>
+                                {% if c.status == 'opened' %}Abierta
+                                {% elif c.status == 'closed' %}Cerrada
+                                {% else %}Publicada
+                                {% endif %}
+                            </td>
                             <!-- Ícono de acción (responder) -->
                             <td class="td-icon">
-                                {% if c.status == 'Cerrada' %}
+                                {% if c.status == 'closed' %}
                                     <a href="#" title="Publicar resultados">
                                         <img class="clickable-icon publish-icon wiggle"
                                              src="{% static 'coevaluador/icon/publish-icon.png' %}"
                                              alt="Publicar resultados" width="28"
                                              height="28">
                                     </a>
-                                {% elif c.status == 'Publicada' %}
+                                {% elif c.status == 'published' %}
                                     <a href="#" title="Exportar resultados">
                                         <img class="clickable-icon export-icon"
                                              src="{% static 'coevaluador/icon/export-icon.png' %}"
@@ -234,10 +251,10 @@
                                 <td class="td-members">
                                     {{ m.student.get_full_name }}
                                 </td>
-{#                                TODO: for c_sheets#}
-{#                                <!-- Calificación -->#}
-{#                                <td class="td-calificación">7.0</td>#}
-{#                                <td class="td-calificación">6.8</td>#}
+                                {#                                TODO: for c_sheets#}
+                                {#                                <!-- Calificación -->#}
+                                {#                                <td class="td-calificación">7.0</td>#}
+                                {#                                <td class="td-calificación">6.8</td>#}
                             </tr>
                         {% endfor %}
                         </tbody>

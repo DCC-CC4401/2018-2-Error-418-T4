@@ -90,7 +90,7 @@
 
                         {% with a.student.pk as id %}
 
-                            {% if a.student.get_full_name == user.get_full_name or coev.status != 'opened'  or aviable|getkey:id == 'answered' %}
+                            {% if a.student.get_full_name == user.get_full_name or coev.status != 'opened'  or available|getkey:id == 'answered' %}
                                 <tr>
                                     <td>{{ a.student.get_full_name }}</td>
                                     <td class="td-icon"></td>

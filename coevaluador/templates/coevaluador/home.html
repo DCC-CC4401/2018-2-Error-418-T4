@@ -51,16 +51,18 @@
         <!-- Permanece oculto hasta apretar el botón correspondiente. -->
         <div id="add-coev-form" class="mb-4">
             <h4 class="mt-3">Agregar Coevaluación</h4>
-            <form action="#" method="post">
+            <form action="{% url 'coevaluador:addCoevaluation' %}" method="post">
+                {% csrf_token %}
                 <div class="form-row">
                     <div class="form-group col-6">
                         <label for="titleCoev">Título de la coevaluación</label>
                         <input type="text" class="form-control" id="titleCoev"
-                               placeholder="ej: Tarea 1, Presentación 3, etc.">
+                               placeholder="ej: Tarea 1, Presentación 3, etc."
+                               name="co_title" required>
                     </div>
                     <div class="form-group col-6">
                         <label for="inputCursoCoev">Curso</label>
-                        <select id="inputCursoCoev" class="form-control">
+                        <select id="inputCursoCoev" class="form-control" name="co_course" required>
                             <option selected>Seleccione un curso...</option>
                             {% for course in courses %}
                                 {% if course in courses_as_student %}
@@ -75,12 +77,24 @@
                 <div class="form-row">
                     <div class="form-group col-3">
                         <label for="dateTimeStartCoEv">Fecha y Hora de inicio</label>
-                        <input type="datetime-local" class="form-control" id="dateTimeStartCoEv">
+                        <input type="datetime-local" class="form-control" id="dateTimeStartCoEv"
+                               name="co_s_date" required>
                     </div>
 
                     <div class="form-group col-3 offset-3">
                         <label for="dateTimeEndCoev">Fecha y Hora límite</label>
-                        <input type="datetime-local" class="form-control" id="dateTimeEndCoev" placeholder="dd/mm/yyyy">
+                        <input type="datetime-local" class="form-control" id="dateTimeEndCoev" placeholder="dd/mm/yyyy"
+                               name="co_e_date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="questions">Selecciona las preguntas</label>
+                        <select multiple class="form-control" id="questions" name="co_questions" required>
+                            {% for q in questions %}
+                                <option value="{{ q.id }}">{{ q.question }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary-custom">Confirmar</button>
@@ -159,10 +173,10 @@
                     {% for c in coevaluations %}
                         {% if c.course in courses_as_student %}
                             {% for s in c_sheets %}
-                                {% if s.coevaluation == c %}
-                                    <tr {% if s.status == 'Pendiente' %}
+                                {% if s.0 == c %}
+                                    <tr {% if s.1 == 'not_answered' %}
                                         class="tr-pendiente"
-                                    {% endif %}> <!-- Fila destacada como Pendiente -->
+                                    {% endif %} onclick="seeCoEv({{ c.pk }})"> <!-- Fila destacada como Pendiente -->
                                         <!-- Fecha de inicio -->
                                         <td class="td-fecha">
                                             {{ c.s_date|date:"d/m/y" }}
@@ -187,10 +201,14 @@
                                             {{ c.e_date|time:"H:i" }}
                                         </td>
                                         <!-- Estado -->
-                                        <td>{{ s.status }}</td>
+                                        <td>
+                                            {% if s.1 == 'answered' %}Contestada
+                                            {% else %}Pendiente
+                                            {% endif %}
+                                        </td>
                                         <!-- Ícono de acción (responder) -->
                                         <td class="td-icon">
-                                            {% if s.status == 'Pendiente' %}
+                                            {% if s.1 == 'not_answered' %}
                                                 <a href="#" title="Responder coevaluación">
                                                     <img class="clickable-icon answer-icon wiggle"
                                                          src="{% static 'coevaluador/icon/answer-icon.png' %}"
@@ -243,14 +261,26 @@
                                     </a>
                                 </td>
                                 <!-- Estado -->
-                                <td>{{ c.status }}</td>
+                                <td>
+                                    {% if c.status == 'opened' %}Abierta
+                                    {% elif c.status == 'closed' %}Cerrada
+                                    {% else %}Publicada
+                                    {% endif %}
+                                </td>
                                 <!-- Ícono de acción (responder) -->
                                 <td class="td-icon">
-                                    {% if c.status == 'Cerrada' %}
+                                    {% if c.status == 'closed' %}
                                         <a href="#" title="Publicar resultados">
                                             <img class="clickable-icon publish-icon wiggle"
                                                  src="{% static 'coevaluador/icon/publish-icon.png' %}"
                                                  alt="Publicar resultados" width="28"
+                                                 height="28">
+                                        </a>
+                                    {% elif c.status == 'published' %}
+                                        <a href="#" title="Exportar resultados">
+                                            <img class="clickable-icon export-icon"
+                                                 src="{% static 'coevaluador/icon/export-icon.png' %}"
+                                                 alt="Exportar resultados" width="28"
                                                  height="28">
                                         </a>
                                     {% endif %}

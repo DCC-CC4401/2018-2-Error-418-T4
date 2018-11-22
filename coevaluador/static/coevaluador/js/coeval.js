@@ -33,14 +33,14 @@ function showNotas(code) {
     for (let i = 0; i < l; i++) {
         nr[i].style.display = 'none';
     }
-    document.getElementById("notas-resumen-"+code).style.display = "block";
+    document.getElementById("notas-resumen-" + code).style.display = "block";
     document.getElementById("notas-placeholder").style.display = "none";
     let active = document.getElementsByClassName("disp");
     let s = active.length;
     for (let i = 0; i < s; i++) {
         active[i].classList.remove("active");
     }
-    document.getElementById("row-btn-"+code).classList.add("active");
+    document.getElementById("row-btn-" + code).classList.add("active");
 }
 
 /* Gestión Curso */
@@ -49,7 +49,7 @@ function seeCourse(year, semester, code, section) {
     let url = "http://127.0.0.1:8000/course/";
     let s = "/";
     url = url.concat(year, s, semester, s, code, s, section);
-    window.location.href =(url);
+    window.location.href = (url);
 }
 
 function showGestionEstudiante() {
@@ -68,18 +68,20 @@ function showGestionGrupo() {
     document.getElementById("active-estudiante").classList.remove("active");
 }
 
-
 /* CoEvaluations */
 
 function seeCoEv(id) {
     let url = "http://127.0.0.1:8000/coevaluation/";
     let s = "/";
     url = url.concat(id, s);
-    window.location.href =(url);
+    window.location.href = (url);
+
 }
+
 function seeCoEv2(id_coev, id_st) {
     let url = "http://127.0.0.1:8000/coevaluation/";
     let s = "/";
-    url = url.concat(id_coev, s, id_st,s);
-    window.location.href =(url);
+    url = url.concat(id_coev, s, id_st, s);
+    window.location.href = (url);
 }
+
