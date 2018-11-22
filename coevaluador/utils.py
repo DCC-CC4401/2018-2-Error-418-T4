@@ -24,3 +24,14 @@ def validate(raw_rut):
 
 def escape_rut(rut):
     return rut.replace('.', '').replace('-', '').replace('k', 'K').replace(' ', '').replace('\t', '')
+
+
+def parse_course_name(course):
+    buf1 = course.split(' ')
+    for i in range(len(buf1)):
+        buf1[i] = buf1[i].replace(',', '')
+    buf = list()
+    for x in buf1:
+        for y in x.split('-'):
+            buf.append(y)
+    return buf

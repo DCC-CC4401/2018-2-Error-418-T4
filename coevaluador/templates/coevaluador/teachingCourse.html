@@ -84,6 +84,16 @@
                            required placeholder="dd/mm/yyyy" name="co_e_date">
                 </div>
             </div>
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="questions">Selecciona las preguntas</label>
+                    <select multiple class="form-control" id="questions" name="co_questions" required>
+                        {% for q in questions %}
+                            <option value="{{ q.id }}">{{ q.question }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary-custom">Confirmar</button>
             <button type="button" class="btn btn-cancel" onclick="cancelAdd()">Cancelar</button>
         </form>

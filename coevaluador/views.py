@@ -5,10 +5,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from coevaluador.models import Coevaluation, CoevaluationSheet
-from .models import Course
 from .forms import LoginForm
 from .models import *
+from .utils import parse_course_name
 
 # Use underscore separated words for views like hello_world.
 
@@ -73,6 +72,7 @@ def home(request):
         cai = Coevaluation.objects.filter(course__in=ai)
         cte = Coevaluation.objects.filter(course__in=te)
         coevaluations = cst.union(cau, cai, cte)
+        questions = Question.objects.all()
         context = {
             'c_sheets': c_set,
             'coevaluations': coevaluations.order_by('e_date').reverse(),
@@ -81,6 +81,7 @@ def home(request):
             'courses_as_auxiliary': user.courses_as_auxiliary.all(),
             'courses_as_aide': user.courses_as_aide.all(),
             'courses_as_teacher': user.courses_as_teacher.all(),
+            'questions': questions
         }
         return render(request, 'coevaluador/home.html', context)
     else:
@@ -159,16 +160,29 @@ def add_co_evaluation(request):
         user = request.user
         if user.is_authenticated:
             co_title = request.POST['co_title']
-            course_year = request.POST['course_year']
-            course_semester = request.POST['course_semester']
-            course_name = request.POST['course_name']
-            course_section = request.POST['course_section']
-            course_obj = Course.objects.get(year=course_year, semester=course_semester, name=course_name,
-                                            section=course_section)
+            if 'co_course' not in request.POST:
+                course_year = request.POST['course_year']
+                course_semester = request.POST['course_semester']
+                course_name = request.POST['course_name']
+                course_section = request.POST['course_section']
+                course_obj = Course.objects.get(year=course_year, semester=course_semester, name=course_name,
+                                                section=course_section)
+            else:
+                course_str = request.POST['co_course']
+                course_data = parse_course_name(course_str)
+                course_year = course_data[3]
+                course_semester = course_data[4]
+                course_code = course_data[0]
+                course_section = course_data[1]
+                course_obj = Course.objects.get(year=course_year, semester=course_semester, code=course_code,
+                                                section=course_section)
+            questions_id = request.POST.getlist('questions')
             s_date = request.POST['co_s_date']
             e_date = request.POST['co_e_date']
             co_evaluation = Coevaluation(name=co_title, s_date=s_date, e_date=e_date,
                                          course=course_obj)
+            for q in questions_id:
+                co_evaluation.question.set(Coevaluation.objects.get(id=q))
             co_evaluation.save()
             return HttpResponseRedirect(reverse('coevaluador:course',
                                                 args=(course_obj.year, course_obj.semester, course_obj.code,
@@ -216,6 +230,8 @@ def course(request, year, semester, code, section):
                     wt_arr = [wt, wt_mem]
                     wts.append(wt_arr)
                 context['work_teams'] = wts
+                questions = course_obj.questions
+                context['questions'] = questions.all()
                 return render(request, 'coevaluador/teachingCourse.html', context)
 
         except Course.DoesNotExist:
