@@ -90,3 +90,19 @@ function showGestionGrupo() {
     document.getElementById("active-grupo").classList.add("active");
     document.getElementById("active-estudiante").classList.remove("active");
 }
+
+
+/* CoEvaluations */
+
+function seeCoEv(id) {
+    let url = "http://127.0.0.1:8000/coevaluation/";
+    let s = "/";
+    url = url.concat(id, s);
+    window.location.href =(url);
+}
+function seeCoEv2(id_coev, id_st) {
+    let url = "http://127.0.0.1:8000/coevaluation/";
+    let s = "/";
+    url = url.concat(id_coev, s, id_st,s);
+    window.location.href =(url);
+}

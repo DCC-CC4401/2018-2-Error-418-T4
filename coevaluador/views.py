@@ -88,7 +88,7 @@ def teaching_home(request):
 
 
 @login_required(login_url='/login')
-def coevaluation(request, coev_id, st_id=-1):
+def coevaluation(request, coev_id, st_id="-1"):
     user = request.user
     st_id = user.pk if st_id == -1 else st_id
     coevaluationsheet = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
@@ -107,20 +107,23 @@ def coevaluation(request, coev_id, st_id=-1):
         team = WorkTeam.objects.filter(course=coevaluation.course, wt_members__student=user).first()
         members = TeamMember.objects.filter(work_team=team)
         aviable = {}
-        # for member in members:
-        #     if member.student != user:
-        #         cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
-        #                                               coevaluated_id=int(member.student.pk)).first()
-        #         print(member, user)
-        #         print(member.student.pk)
-        #         aviable[member.student.pk] = cs.status
+        for member in members:
+            if member.student != user:
+                cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+                                                      coevaluated_id=member.student.pk).first()
+                print(member, user)
+                print("cs", cs)
+                print(member.student.pk)
+                aviable[member.student.pk] = cs.status
+                print(aviable[member.student.pk])
         # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
         # Como dict[a.id]
         current_st = -1
-        if int(st_id) >= 0:
+        if st_id != "-1":
             a = members.filter(student_id=st_id).first().student
             if not a.get_full_name() == user.get_full_name():
                 current_st = a
+        print(range(1, 8))
 
         context = {'coev': coevaluation,
                    "group": members,
@@ -129,8 +132,9 @@ def coevaluation(request, coev_id, st_id=-1):
                    "current_st": current_st,
                    "user": user,
                    "coevsheet": coevaluationsheet,
-                  # "aviable": aviable
-        }
+                   "aviable": aviable,
+                   "range": range(1, 8)
+                   }
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)
     else:
@@ -138,8 +142,42 @@ def coevaluation(request, coev_id, st_id=-1):
         return render(request, 'coevaluador/login.html', {'form': form})
 
 
-def teaching_coevaluation(request):
-    return render(request, 'coevaluador/teachingCoevaluation.html')
+def teaching_coevaluation(request, coev_id):
+    user = request.user
+    coevaluation = Coevaluation.objects.get(id=coev_id)
+    questions = coevaluation.question.all()
+
+
+    if coev_id:
+        team = WorkTeam.objects.filter(course=coevaluation.course, wt_members__student=user).first()
+        members = TeamMember.objects.filter(work_team=team)
+        aviable = {}
+        for member in members:
+            if member.student != user:
+                cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+                                                      coevaluated_id=member.student.pk).first()
+                print(member, user)
+                print("cs", cs)
+                print(member.student.pk)
+                aviable[member.student.pk] = cs.status
+                print(aviable[member.student.pk])
+        # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
+        # Como dict[a.id]
+        print(range(1, 8))
+
+        context = {'coev': coevaluation,
+                   "group": members,
+                   "team": team,
+                   "questions": questions,
+                   "user": user,
+                   "aviable": aviable,
+                   "range": range(1, 8)
+                   }
+
+        return render(request, 'coevaluador/teachingCoevaluation.html', context)
+    else:
+        form = LoginForm()
+        return render(request, 'coevaluador/login.html', {'form': form})
 
 
 def add_co_evaluation(request):
