@@ -119,7 +119,7 @@ def coevaluation(request, coev_id, st_id=-1):
         for member in members:
             if member.student != user:
                 cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
-                                                      coevaluated_id=int(member.student.pk)).first()
+                                                      coevaluated_id=member.student.pk).first()
                 print(member, user)
                 print("cs", cs)
                 print(member.student.pk)
