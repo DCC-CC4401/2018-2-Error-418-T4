@@ -113,7 +113,7 @@ def coevaluation(request, coev_id, st_id=-1):
         # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
         # Como dict[a.id]
         current_st = -1
-        if int(st_id) >= -1:
+        if st_id != "-1":
             a = members.filter(student_id=st_id).first().student
             if not a.get_full_name() == user.get_full_name():
                 current_st = a
