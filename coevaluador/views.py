@@ -117,6 +117,7 @@ def coevaluation(request, coev_id, st_id=-1):
             a = members.filter(student_id=st_id).first().student
             if not a.get_full_name() == user.get_full_name():
                 current_st = a
+        print( range(1,8))
 
         context = {'coev': coevaluation,
                    "group": members,
@@ -125,7 +126,8 @@ def coevaluation(request, coev_id, st_id=-1):
                    "current_st": current_st,
                    "user": user,
                    "coevsheet": coevaluationsheet,
-                   "aviable": aviable
+                   "aviable": aviable,
+                   "range": range(1,8)
                    }
 
         return render(request, 'coevaluador/studentCoevaluation.html', context)
