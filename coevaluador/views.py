@@ -220,20 +220,31 @@ def owner_profile(request):
         ai = user.courses_as_aide.all()
         te = user.courses_as_teacher.all()
         courses = st.union(au, ai, te)
-        student_coev_sheets = CoevaluationSheet.objects.filter(student=user.rut)
-        student_coev = list()
-        for obj in student_coev_sheets:
-            student_coev.append(obj.coevaluation)
-        student_coev.sort(key=lambda coev: coev.status)
+        coevaluated_sheets = user.coevaluated.all()
+        sheets = list()
+        coev_sheets = list()
+        count = list()
+        grade_sum = list()
+        for c in coevaluated_sheets:
+            if c.coevaluation.name not in sheets:
+                sheets.append(c.coevaluation.name)
+                coev_sheets.append(c)
+                count.append(0)
+                grade_sum.append(0)
+            i = sheets.index(c.coevaluation.name)
+            count[i] += 1
+            grade_sum[i] += float(c.grade)
+        for index in range(len(grade_sum)):
+            grade_sum[index] /= count[index]
+            coev_sheets[index].grade = grade_sum[index]
         context = {
             "student": user,
             "courses": courses,
-            'courses_as_student': user.courses_as_student.all(),
-            'courses_as_auxiliary': user.courses_as_auxiliary.all(),
-            'courses_as_aide': user.courses_as_aide.all(),
-            'courses_as_teacher': user.courses_as_teacher.all(),
-            "student_coevaluations": student_coev,
-            "student_coevaluation_sheets": student_coev_sheets
+            'courses_as_student': st,
+            'courses_as_auxiliary': au,
+            'courses_as_aide': ai,
+            'courses_as_teacher': te,
+            "coevaluated_sheets": coev_sheets
         }
         return render(request, 'coevaluador/ownerProfile.html', context)
 

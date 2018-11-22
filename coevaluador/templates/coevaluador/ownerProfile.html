@@ -141,9 +141,8 @@
 
                             <!-- Cuerpo de tabla (Table Data) -->
                             <tbody>
-                            {% for coev_sheet in student_coevaluation_sheets %}
-                                {% if coev_sheet.coevaluation.course.code == course.code and coev_sheet.coevaluation.status == "Publicada" %}
-
+                            {% for coev_sheet in coevaluated_sheets %}
+                                {% if coev_sheet.coevaluation.course.code == course.code and coev_sheet.status == "answered" %}
                                     <tr>
                                         <!-- Fecha de publicación -->
                                         <td class="td-fecha">{{ coev_sheet.coevaluation.e_date|date:"d/m/y" }}
@@ -151,15 +150,12 @@
                                         <!-- Título de coevaluación -->
                                         <td>{{ coev_sheet.coevaluation.name }}</td>
                                         <!-- Nota -->
-                                        <!-- % if grade < 4.0 %} -->
-                                            <td class="td-nota td-nota-roja">3.8</td>
-                                        <!-- % elseif grade >= 4.0 %} --
-                                            <td class="td-nota">6.2</td>
-                                        % endif %} -->
+                                        <td class="td-nota
+                                        {% if coev_sheet.grade < 4 %}
+                                            td-nota-roja{% endif %}">{{ coev_sheet.grade }}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
