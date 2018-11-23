@@ -123,19 +123,14 @@ def coevaluation(request, coev_id, st_id="-1"):
             if member.student != user:
                 cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
                                                       coevaluated_id=member.student.pk).first()
-                print(member, user)
-                print("cs", cs)
-                print(member.student.pk)
+
                 available[member.student.pk] = cs.status
-                print(available[member.student.pk])
-        # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
-        # Como dict[a.id]
+
         current_st = -1
         if st_id != "-1":
             a = members.filter(student_id=st_id).first().student
             if not a.get_full_name() == user.get_full_name():
                 current_st = a
-        print(range(1, 8))
 
         context = {'coev': coevaluation,
                    "group": members,
@@ -167,14 +162,7 @@ def teaching_coevaluation(request, coev_id):
             if member.student != user:
                 cs = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
                                                       coevaluated_id=member.student.pk).first()
-                print(member, user)
-                print("cs", cs)
-                print(member.student.pk)
                 available[member.student.pk] = cs.status
-                print(available[member.student.pk])
-        # Hacer un diccionario guardando los status , luego pasarle el coso y consultarlo en el hmlt
-        # Como dict[a.id]
-        print(range(1, 8))
 
         context = {'coev': coevaluation,
                    "group": members,
