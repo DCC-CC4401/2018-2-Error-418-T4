@@ -295,19 +295,21 @@ def owner_profile(request):
         te = user.courses_as_teacher.all()
         courses = st.union(au, ai, te)
         coevaluated_sheets = user.coevaluated.all()
-        sheets = list()
+        coevaluations = list()
         coev_sheets = list()
         count = list()
         grade_sum = list()
         for c in coevaluated_sheets:
-            if c.coevaluation.name not in sheets:
-                sheets.append(c.coevaluation.name)
-                coev_sheets.append(c)
-                count.append(0)
-                grade_sum.append(0)
-            i = sheets.index(c.coevaluation.name)
-            count[i] += 1
-            grade_sum[i] += float(c.grade)
+            if c.coevaluation.status == 'published':
+                if c.coevaluation.name not in coevaluations:
+                    coevaluations.append(c.coevaluation.name)
+                    coev_sheets.append(c)
+                    count.append(0)
+                    grade_sum.append(0)
+                i = coevaluations.index(c.coevaluation.name)
+                count[i] += 1
+                grade_sum[i] += float(c.grade)
+
         for index in range(len(grade_sum)):
             grade_sum[index] /= count[index]
             coev_sheets[index].grade = grade_sum[index]
@@ -321,8 +323,12 @@ def owner_profile(request):
             "coevaluated_sheets": coev_sheets
         }
         return render(request, 'coevaluador/ownerProfile.html', context)
+    else:
+        form = LoginForm()
+        return render(request, 'coevaluador/login.html', {'form': form})
 
 
+@login_required(login_url='/login')
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
