@@ -86,7 +86,7 @@
                                     {% endif %} tooltip-custom">
                                     <span class="tooltiptext"></span>
                                 </div>
-                                <span class="curso-nombre">{{ course.name }}</span>
+                                <a href="course/{{ course.year }}/{{ course.semester }}/{{ course.code }}/{{ course.section }}" class="curso-nombre">{{ course.name }}</a>
                                 <br>
                                 <span class="curso-codigo">{{ course.code }}</span>
                             </td>
