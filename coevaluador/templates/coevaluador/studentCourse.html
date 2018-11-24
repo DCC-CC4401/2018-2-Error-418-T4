@@ -88,7 +88,8 @@
                                     </td>
                                     <!-- Estado -->
                                     <td>
-                                        {% if s.1 == 'answered' %}Contestada
+                                        <td>{% if c.status == 'published' %} Publicada
+                                        {% elif s.1 == 'answered' %}Contestada
                                         {% else %}Pendiente
                                         {% endif %}
                                     </td>
