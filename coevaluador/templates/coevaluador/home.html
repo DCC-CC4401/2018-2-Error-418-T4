@@ -174,7 +174,7 @@
                         {% if c.course in courses_as_student %}
                             {% for s in c_sheets %}
                                 {% if s.0 == c %}
-                                    <tr {% if s.1 == 'not_answered' %}
+                                    <tr {% if s.1 == 'not_answered' and c.status == 'opened' %}
                                         class="tr-pendiente"
                                     {% endif %} onclick="seeCoEv({{ c.pk }})"> <!-- Fila destacada como Pendiente -->
                                         <!-- Fecha de inicio -->
@@ -201,10 +201,10 @@
                                             {{ c.e_date|time:"H:i" }}
                                         </td>
                                         <!-- Estado -->
-                                        <td>
-                                            {% if s.1 == 'answered' %}Contestada
-                                            {% else %}Pendiente
-                                            {% endif %}
+                                        <td>{% if c.status == 'published' %} Publicada
+                                        {% elif s.1 == 'answered' %}Contestada
+                                        {% else %}Pendiente
+                                        {% endif %}
                                         </td>
                                         <!-- Ícono de acción (responder) -->
                                         <td class="td-icon">
