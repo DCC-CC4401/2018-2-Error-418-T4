@@ -77,7 +77,7 @@ def home(request):
         questions = Question.objects.all()
         context = {
             'c_sheets': c_set,
-            'coevaluations': coevaluations.order_by('e_date').reverse()[:10],
+            'coevaluations': coevaluations.order_by('e_date').reverse()[:11],
             'courses': courses.order_by('name'),
             'courses_as_student': user.courses_as_student.all(),
             'courses_as_auxiliary': user.courses_as_auxiliary.all(),

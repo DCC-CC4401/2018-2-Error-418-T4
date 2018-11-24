@@ -55,7 +55,8 @@
             <span>{{ student.rut }}</span>
             <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Correo Electrónico</h6>
             <span>{{ student.email }}</span>
-            <input type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block" onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"
+            <input type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block"
+                   onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"
                    value="Cambiar contraseña">
             </input>
         </div>
@@ -77,7 +78,9 @@
                     <!-- Cuerpo de tabla (Table Data) -->
                     <tbody>
                     {% for course in courses %}
-                        <tr class="disp" id="row-btn-{{course.code}}" onclick="showNotas('{{course.code}}')">
+                        <tr class="disp" id="row-btn-{{ course.code }}" {% if course in courses_as_student %}
+                            onclick="showNotas('{{ course.code }}')"
+                        {% endif %}>
                             <td class="td-curso-full">
                                 <div class="cargos cargos-{% if course in courses_as_student %}alumno
                                     {% elif course in courses_as_teacher %}profesor
@@ -86,7 +89,8 @@
                                     {% endif %} tooltip-custom">
                                     <span class="tooltiptext"></span>
                                 </div>
-                                <a href="course/{{ course.year }}/{{ course.semester }}/{{ course.code }}/{{ course.section }}" class="curso-nombre">{{ course.name }}</a>
+                                <a href="course/{{ course.year }}/{{ course.semester }}/{{ course.code }}/{{ course.section }}"
+                                   class="curso-nombre">{{ course.name }}</a>
                                 <br>
                                 <span class="curso-codigo">{{ course.code }}</span>
                             </td>
@@ -106,16 +110,16 @@
                 <form action="/save/data/" method="post">
                     {% csrf_token %}
                     <div>
-                        <p>{{form.old_password}}</p>
-                        <span>{{form.old_password.errors}}</span>
+                        <p>{{ form.old_password }}</p>
+                        <span>{{ form.old_password.errors }}</span>
                     </div>
                     <div>
-                        <p>{{form.new_password}}</p>
-                        <span>{{form.new_password.errors}}</span>
+                        <p>{{ form.new_password }}</p>
+                        <span>{{ form.new_password.errors }}</span>
                     </div>
                     <div>
-                        <p>{{form.confirm_password}}</p>
-                        <span>{{form.confirm_password.errors}}</span>
+                        <p>{{ form.confirm_password }}</p>
+                        <span>{{ form.confirm_password.errors }}</span>
                     </div>
                     <button type="submit" class="btn btn-primary-custom">Confirmar</button>
                     <button type="button" class="btn btn-cancel" onclick="cancelPass()">Cancelar</button>
@@ -125,9 +129,10 @@
                 <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas</h5>
             </div>
             {% for course in courses %}
-                <div class="notas-resumen" id="notas-resumen-{{course.code}}">
+                <div class="notas-resumen" id="notas-resumen-{{ course.code }}">
                     <h4 class="d-inline-block mt-1">Tus Notas</h4>
-                    <h5 class="float-right mb-0 mt-2 text-muted" id="currentCurso">{{ course.code }}-{{ course.section }}, {{ course.year }}-{{ course.semester }}</h5>
+                    <h5 class="float-right mb-0 mt-2 text-muted"
+                        id="currentCurso">{{ course.code }}-{{ course.section }}, {{ course.year }}-{{ course.semester }}</h5>
 
                     <div class="table-wrap table-responsive my-1"> <!-- "Envoltura" de la tabla -->
                         <table class="table table-notas-perfil table-striped table-hover mb-0"> <!-- Tabla -->
@@ -147,7 +152,7 @@
                                     <tr>
                                         <!-- Fecha de publicación -->
                                         <td class="td-fecha">{{ coev_sheet.coevaluation.e_date|date:"d/m/y" }}
-                                                {{ coev_sheet.coevaluation.e_date|time:"H:i" }}</td>
+                                            {{ coev_sheet.coevaluation.e_date|time:"H:i" }}</td>
                                         <!-- Título de coevaluación -->
                                         <td>{{ coev_sheet.coevaluation.name }}</td>
                                         <!-- Nota -->
