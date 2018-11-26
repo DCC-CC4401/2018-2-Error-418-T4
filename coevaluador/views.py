@@ -91,7 +91,37 @@ def home(request):
         return render(request, 'coevaluador/login.html', {'form': form})
 
 
+# NO BORRAR AÚN!!!
 def student_home(request):
+    # coevs = Coevaluation.objects.all()
+    # for c in coevs:
+    #     wts = c.course.workteam_set.all()
+    #     for wt in wts:
+    #         mem = wt.wt_members.all()
+    #         n = len(mem)
+    #         for i in range(n):
+    #             a = mem[i].student
+    #             for j in range(n):
+    #                 b = mem[j].student
+    #                 if a == b:
+    #                     continue
+    #                 else:
+    #                     r = random.Random()
+    #                     if c.status != 'opened':
+    #                         g = r.randint(50, 70) * 1.0 / 10
+    #                         cs = CoevaluationSheet(team=wt, coevaluation=c,
+    #                                                coevaluator=a, coevaluated=b, status='answered', grade=g)
+    #                         cs.save()
+    #                     else:
+    #                         if r.randint(0, 1) == 1:
+    #                             g = r.randint(50, 70) * 1.0 / 10
+    #                             cs = CoevaluationSheet(team=wt, coevaluation=c,
+    #                                                    coevaluator=a, coevaluated=b, status='answered', grade=g)
+    #                             cs.save()
+    #                         else:
+    #                             cs = CoevaluationSheet(team=wt, coevaluation=c,
+    #                                                    coevaluator=a, coevaluated=b)
+    #                             cs.save()
     return render(request, 'coevaluador/studentHome.html')
 
 
@@ -103,20 +133,20 @@ def teaching_home(request):
 def coevaluation(request, coev_id, st_id="-1"):
     user = request.user
     st_id = user.pk if st_id == -1 else st_id
-    coevaluationsheet = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
-                                                         coevaluated_id=st_id).first()
-    coevaluation = Coevaluation.objects.get(id=coev_id)
-    questions = coevaluation.question.all()
+    co_evaluation_sheet = CoevaluationSheet.objects.filter(coevaluation_id=coev_id, coevaluator=user,
+                                                           coevaluated_id=st_id).first()
+    co_evaluation = Coevaluation.objects.get(id=coev_id)
+    questions = co_evaluation.question.all()
 
     if request.method == 'POST':
         for q in questions:
             ans = request.POST[str(q.id)]
-            answer = Answer(coevaluation_sheet=coevaluationsheet, question=q, ans=ans)
+            answer = Answer(coevaluation_sheet=co_evaluation_sheet, question=q, ans=ans)
             answer.save()
-        coevaluationsheet.status = 'answered'
-        coevaluationsheet.save()
+        co_evaluation_sheet.status = 'answered'
+        co_evaluation_sheet.save()
     if coev_id:
-        team = WorkTeam.objects.filter(course=coevaluation.course, wt_members__student=user).first()
+        team = WorkTeam.objects.filter(course=co_evaluation.course, wt_members__student=user).first()
         members = TeamMember.objects.filter(work_team=team)
         available = {}
         for member in members:
@@ -132,13 +162,13 @@ def coevaluation(request, coev_id, st_id="-1"):
             if not a.get_full_name() == user.get_full_name():
                 current_st = a
 
-        context = {'coev': coevaluation,
+        context = {'coev': co_evaluation,
                    "group": members,
                    "team": team,
                    "questions": questions,
                    "current_st": current_st,
                    "user": user,
-                   "coevsheet": coevaluationsheet,
+                   "coevsheet": co_evaluation_sheet,
                    "available": available,
                    "range": range(1, 8)
                    }
@@ -194,20 +224,40 @@ def add_co_evaluation(request):
             else:
                 course_str = request.POST['co_course']
                 course_data = parse_course_name(course_str)
-                course_year = course_data[3]
-                course_semester = course_data[4]
+                len_cd = len(course_data)
+                course_year = int(course_data[len_cd - 2])
+                course_semester = int(course_data[len_cd - 1])
                 course_code = course_data[0]
-                course_section = course_data[1]
+                course_section = int(course_data[1])
                 course_obj = Course.objects.get(year=course_year, semester=course_semester, code=course_code,
                                                 section=course_section)
-            questions_id = request.POST.getlist('questions')
+            print("hola")
+            questions_id = request.POST.getlist('co_questions')
+            for i in questions_id:
+                print(i)
             s_date = request.POST['co_s_date']
             e_date = request.POST['co_e_date']
             co_evaluation = Coevaluation(name=co_title, s_date=s_date, e_date=e_date,
                                          course=course_obj)
-            for q in questions_id:
-                co_evaluation.question.add(Question.objects.get(id=q))
             co_evaluation.save()
+            for q in questions_id:
+                question = Question.objects.get(id=q)
+                print(question)
+                co_evaluation.question.add(question)
+            co_evaluation.save()
+            wts = co_evaluation.course.workteam_set.all()
+            for wt in wts:
+                mem = wt.wt_members.all()
+                n = len(mem)
+                for i in range(n):
+                    a = mem[i].student
+                    for j in range(n):
+                        b = mem[j].student
+                        if a == b:
+                            continue
+                        else:
+                            cs = CoevaluationSheet(team=wt, coevaluation=co_evaluation, coevaluator=a, coevaluated=b)
+                            cs.save()
             if 'co_course' not in request.POST:
                 return HttpResponseRedirect(reverse('coevaluador:course',
                                                     args=(course_obj.year, course_obj.semester, course_obj.code,
@@ -300,7 +350,7 @@ def owner_profile(request):
 
         for index in range(len(grade_sum)):
             grade_sum[index] /= count[index]
-            coev_sheets[index].grade = grade_sum[index]
+            coev_sheets[index].grade = round(grade_sum[index], 1)
         context = {
             "student": user,
             "courses": courses,
