@@ -45,7 +45,7 @@
                 <span>{{ student.rut }}</span>
                 <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Correo Electrónico</h6>
                 <span>{{ student.email }}</span>
-{#                       onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"#}
+                {#                       onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"#}
                 <input type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block"
                        onclick="changePass()" value="Cambiar contraseña">
             </div>
@@ -115,7 +115,10 @@
                     </form>
                 </div>
                 <div id="notas-placeholder" class="mt-5">
-                    <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas</h5>
+                    <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas.</h5>
+                </div>
+                <div id="no-notas-placeholder" class="mt-5">
+                    <h5 class="font-weight-normal text-center text-muted">Este curso no tiene notas para ver.</h5>
                 </div>
                 {% for course in courses %}
                     <div class="notas-resumen" id="notas-resumen-{{ course.code }}">
