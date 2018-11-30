@@ -45,10 +45,9 @@
                 <span>{{ student.rut }}</span>
                 <h6 class="text-muted mt-3 mb-0 pb-1 border-bottom">Correo Electrónico</h6>
                 <span>{{ student.email }}</span>
+{#                       onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"#}
                 <input type="button" id="change-pass-btn" class="btn btn-secondary mt-3 d-block"
-                       onclick="window.location.href='{% url 'coevaluador:changePassword' %}'"
-                       value="Cambiar contraseña">
-                </input>
+                       onclick="changePass()" value="Cambiar contraseña">
             </div>
             <!-- FIN Perfil -->
 
