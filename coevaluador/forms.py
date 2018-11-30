@@ -22,7 +22,7 @@ class LoginForm(forms.Form):
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={
         'id': 'old_password',
-        'class': 'form-control',
+        'class': 'form-control mb-4',
         'placeholder': 'Contraseña Antigua',
         'required': True,
         'autofocus': True
@@ -30,14 +30,14 @@ class ChangePasswordForm(forms.Form):
 
     new_password = forms.CharField(widget=forms.PasswordInput(attrs={
         'id': 'new_password',
-        'class': 'form-control',
+        'class': 'form-control mb-4',
         'placeholder': 'Contraseña Nueva',
         'required': True
     }))
 
     rep_password = forms.CharField(widget=forms.PasswordInput(attrs={
         'id': 'rep_password',
-        'class': 'form-control',
-        'placeholder': 'Contraseña Nueva',
+        'class': 'form-control mb-4',
+        'placeholder': 'Repetir Contraseña Nueva',
         'required': True
     }))

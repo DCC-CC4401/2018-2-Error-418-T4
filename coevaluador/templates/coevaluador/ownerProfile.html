@@ -95,21 +95,15 @@
             <!-- Tabla de notas -->
             <div class="col-md-5">
                 <div id="cambiar-contrasena">
-                    <h4 class="d-inline-block mt-1">Cambiar contraseña</h4>
-                    <form action="/save/data/" method="post">
+                    <h4 class="d-inline-block mt-1 mb-4">Cambiar contraseña</h4>
+                    <form action="#" method="post">
                         {% csrf_token %}
-                        <div>
-                            <p>{{ form.old_password }}</p>
-                            <span>{{ form.old_password.errors }}</span>
-                        </div>
-                        <div>
-                            <p>{{ form.new_password }}</p>
-                            <span>{{ form.new_password.errors }}</span>
-                        </div>
-                        <div>
-                            <p>{{ form.confirm_password }}</p>
-                            <span>{{ form.confirm_password.errors }}</span>
-                        </div>
+                        {{ form.non_field_errors }}
+                        {% for field in form %}
+                            {{ field.errors }}
+                            <label for="{{ field.id_for_label }}" class="sr-only">{{ field.name }}</label>
+                            {{ field }}
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary-custom">Confirmar</button>
                         <button type="button" class="btn btn-cancel" onclick="cancelPass()">Cancelar</button>
                     </form>

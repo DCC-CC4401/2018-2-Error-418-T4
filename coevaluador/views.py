@@ -351,6 +351,7 @@ def owner_profile(request):
         for index in range(len(grade_sum)):
             grade_sum[index] /= count[index]
             coev_sheets[index].grade = round(grade_sum[index], 1)
+        form = ChangePasswordForm()
         context = {
             "student": user,
             "courses": courses,
@@ -358,7 +359,8 @@ def owner_profile(request):
             'courses_as_auxiliary': au,
             'courses_as_aide': ai,
             'courses_as_teacher': te,
-            "coevaluated_sheets": coev_sheets
+            'coevaluated_sheets': coev_sheets,
+            'form': form
         }
         return render(request, 'coevaluador/ownerProfile.html', context)
     else:
