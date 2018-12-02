@@ -34,6 +34,7 @@ function changePass() {
         nr[i].style.display = 'none';
     }
     document.getElementById("notas-placeholder").style.display = "none";
+    document.getElementById("no-notas-placeholder").classList.add("d-none");
     document.getElementById("change-pass-btn").classList.add("active");
     let active = document.getElementsByClassName("disp");
     let s = active.length;
@@ -49,7 +50,14 @@ function showNotas(code) {
     for (let i = 0; i < l; i++) {
         nr[i].style.display = 'none';
     }
-    document.getElementById("notas-resumen-" + code).style.display = "block";
+    let grades = document.getElementById("notas-resumen-" + code);
+    let len_grades = grades.children[2].children[0].children[1].children.length;
+    if (len_grades === 0) {
+        document.getElementById("no-notas-placeholder").classList.remove("d-none");
+    } else {
+        document.getElementById("no-notas-placeholder").classList.add("d-none");
+        document.getElementById("notas-resumen-" + code).style.display = "block";
+    }
     document.getElementById("notas-placeholder").style.display = "none";
     let active = document.getElementsByClassName("disp");
     let s = active.length;
@@ -68,6 +76,7 @@ function cancelPass() {
     }
     document.getElementById("change-pass-btn").classList.add("active");
     document.getElementById("notas-placeholder").style.display = "block";
+    document.getElementById("no-notas-placeholder").classList.add("d-none");
 }
 
 /* Gestión Curso */

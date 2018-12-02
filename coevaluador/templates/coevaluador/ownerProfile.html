@@ -67,9 +67,10 @@
                         <!-- Cuerpo de tabla (Table Data) -->
                         <tbody>
                         {% for course in courses %}
-                            <tr class="disp" id="row-btn-{{ course.code }}" {% if course in courses_as_student %}
-                                onclick="showNotas('{{ course.code }}')"
-                            {% endif %}>
+                            <tr class="disp" id="row-btn-{{ course.code }}"
+                                    {% if course in courses_as_student %} onclick="showNotas('{{ course.code }}')"
+                                    {% else %} onclick="cancelPass()"
+                                    {% endif %}>
                                 <td class="td-curso-full">
                                     <div class="cargos cargos-{% if course in courses_as_student %}alumno
                                     {% elif course in courses_as_teacher %}profesor
@@ -110,6 +111,9 @@
                 </div>
                 <div id="notas-placeholder" class="mt-5">
                     <h5 class="font-weight-normal text-center text-muted">Selecciona un curso para ver tus notas.</h5>
+                </div>
+                <div id="no-notas-placeholder" class="mt-5 d-none">
+                    <h5 class="font-weight-normal text-center text-muted">Aún no tienes notas en este curso.</h5>
                 </div>
                 {% for course in courses %}
                     <div class="notas-resumen" id="notas-resumen-{{ course.code }}">
