@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login as lgi, logout as lgo
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import update_session_auth_hash
 
@@ -231,10 +231,9 @@ def add_co_evaluation(request):
                 course_section = int(course_data[1])
                 course_obj = Course.objects.get(year=course_year, semester=course_semester, code=course_code,
                                                 section=course_section)
-            print("hola")
+
             questions_id = request.POST.getlist('co_questions')
-            for i in questions_id:
-                print(i)
+
             s_date = request.POST['co_s_date']
             e_date = request.POST['co_e_date']
             co_evaluation = Coevaluation(name=co_title, s_date=s_date, e_date=e_date,
@@ -242,7 +241,6 @@ def add_co_evaluation(request):
             co_evaluation.save()
             for q in questions_id:
                 question = Question.objects.get(id=q)
-                print(question)
                 co_evaluation.question.add(question)
             co_evaluation.save()
             wts = co_evaluation.course.workteam_set.all()
@@ -371,19 +369,29 @@ def owner_profile(request):
 @login_required(login_url='/login')
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = ChangePasswordForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('coevaluador:ownerProfile')
+            # process the data in form.cleaned_data as required
+            old_password = form.cleaned_data['old_password']
+            new_password = form.cleaned_data['new_password']
+            rep_password = form.cleaned_data['rep_password']
+            user = request.user
+            if user.check_password(old_password):
+                if new_password == rep_password:
+                    user.set_password(new_password)
+                    user.save()
+                    update_session_auth_hash(request, user)  # Important!
+                    messages.success(request, 'Tu contraseña ha sido actualizada!')
+                else:
+                    messages.error(request, 'Las contraseñas no coinciden.')
+            else:
+                messages.error(request, 'La antigua contraseña no es válida.')
+            return HttpResponseRedirect(reverse('coevaluador:ownerProfile'))
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'coevaluador/changePassword.html', {
-        'form': form
-    })
+        form = ChangePasswordForm()
+    return render(request, 'coevaluador/ownerProfile.html', {'form': form})
 
 
 def teaching_profile(request):
